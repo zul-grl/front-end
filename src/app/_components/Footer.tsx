@@ -2,14 +2,14 @@ const Footer = () => {
   return (
     <div className="h-[755px] bg-primary pt-[60px] w-full">
       <div className="h-[92px] bg-[#EF4444] flex gap-[34px] overflow-hidden justify-center items-center w-full">
-        {Array.from({ length: 5 }, (_, i) => (
+        {Array.from({ length: 7 }, (_, i) => (
           <h2 key={i} className="text-[30px] text-white">
             Fresh fast delivered
           </h2>
         ))}
       </div>
-      <div className="p-[88px]">
-        <div className="flex gap-[125px]">
+      <div className="px-[220px] py-[88px]">
+        <div className="flex gap-[220px]">
           <div className="flex flex-col items-center">
             <img className="w-[46px]" src="/logo.png" alt="" />
             <div>
@@ -26,7 +26,7 @@ const Footer = () => {
             <p>Contact us</p>
             <p>Delivery zone</p>
           </div>
-          <div className="flex gap-[125px]">
+          <div className="flex gap-[220px]">
             <div className="text-secondary flex flex-col gap-2">
               <p className="text-[#71717A]">MENU</p>
               <p>Appetizers</p>
@@ -53,7 +53,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="px-[88px] py-8">
+      <div className="px-[220px] py-8">
         <div className="border-t border-t-[#71717A] flex gap-12 pt-4">
           <p className="text-[#71717A]">Copyright 2024 © Nomnom LLC</p>
           <p className="text-[#71717A]">Privacy policy</p>

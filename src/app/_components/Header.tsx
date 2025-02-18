@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <div className="h-[68px] flex bg-primary justify-between items-center px-[88px]">
+    <div className="h-[68px] flex bg-primary justify-between items-center px-[120px]">
       <div className="flex">
         <img className="w-[46px]" src="/logo.png" alt="" />
         <div>
@@ -14,12 +14,12 @@ const Header = () => {
         </div>
       </div>
       <div className="flex gap-3">
-        <Link href="/search">
+        <Link href="/signup">
           <button className="py-2 px-3 bg-secondary rounded-3xl">
             Sign up
           </button>
         </Link>
-        <Link href="/search">
+        <Link href="/login">
           <button className="py-2 px-3 bg-[#EF4444] rounded-3xl">Log in</button>{" "}
         </Link>
       </div>
