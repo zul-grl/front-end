@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, ChangeEvent } from "react";
 
 const CloudinaryUpload = () => {
@@ -50,7 +51,7 @@ const CloudinaryUpload = () => {
     <div>
       <input type="file" onChange={handleFileChange} />
       <button onClick={handleUpload}>Upload</button>
-      {image && <img src={image} alt="Uploaded Preview" width={200} />}
+      {image && <Image width={1000} height={1000} src={image} alt="" />}
     </div>
   );
 };

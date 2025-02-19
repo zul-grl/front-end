@@ -14,12 +14,12 @@ const Header = () => {
         </div>
       </div>
       <div className="flex gap-3">
-        <Link href="/signup">
+        <Link href="/auth/signup">
           <button className="py-2 px-3 bg-secondary rounded-3xl">
             Sign up
           </button>
         </Link>
-        <Link href="/login">
+        <Link href="/auth/login">
           <button className="py-2 px-3 bg-[#EF4444] rounded-3xl">Log in</button>{" "}
         </Link>
       </div>

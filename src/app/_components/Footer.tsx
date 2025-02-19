@@ -1,12 +1,14 @@
 const Footer = () => {
   return (
     <div className="h-[755px] bg-primary pt-[60px] w-full">
-      <div className="h-[92px] bg-[#EF4444] flex gap-[34px] overflow-hidden justify-center items-center w-full">
-        {Array.from({ length: 7 }, (_, i) => (
-          <h2 key={i} className="text-[30px] text-white">
-            Fresh fast delivered
-          </h2>
-        ))}
+      <div className="h-[92px] bg-[#EF4444] whitespace-nowrap flex gap-[34px] overflow-hidden justify-center items-center w-full">
+        <div className="flex gap-7 animate-scroll">
+          {Array.from({ length: 14 }, (_, i) => (
+            <h2 key={i} className="text-[30px] text-white">
+              Fresh fast delivered
+            </h2>
+          ))}
+        </div>
       </div>
       <div className="px-[220px] py-[88px]">
         <div className="flex gap-[220px]">

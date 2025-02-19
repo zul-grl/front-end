@@ -17,7 +17,7 @@ const Login = () => {
       <Button>Let's Go</Button>
       <div className="flex gap-2">
         <p className="text-[#71717A]">Don’t have an account?</p>
-        <Link href={"/signup"}>
+        <Link href={"/auth/signup"}>
           <p className="text-[#2563EB]">Sign up</p>
         </Link>
       </div>
