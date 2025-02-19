@@ -1,23 +1,22 @@
 import Image from "next/image";
-
-const Card = ({
-  image,
-  name,
-  description,
-  price,
-}: {
+export type CardProps = {
   image: string;
   name: string;
   description: string;
   price: string;
-}) => {
+  id: number;
+};
+const Card = ({ image, name, id, description, price }: CardProps) => {
   return (
-    <div className="p-4  rounded-3xl flex flex-col gap-2 bg-[#FFFFFF] w-[397px] h-[342px]">
+    <div
+      key={id}
+      className="p-4  rounded-3xl flex flex-col gap-2 bg-[#FFFFFF] w-[397px] h-[342px]"
+    >
       <Image
         alt=""
         width={1000}
         height={1000}
-        className="h-[210px] w-[100%] rounded-2xl"
+        className="h-[210px] w-[100%] object-cover rounded-2xl"
         src={image}
       />
       <div>

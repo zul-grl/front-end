@@ -13,7 +13,7 @@ const Categories = () => {
       />
       <div className="max-w-[1440px] flex flex-col">
         <h2>Categories</h2>
-        <ToggleGroup type="single">
+        <ToggleGroup type="single" className="flex gap-5">
           <ToggleGroupItem
             className="bg-white text-black rounded-full data-[state=on]:bg-red-500 data-[state=on]:text-white"
             value="Appetizers"
