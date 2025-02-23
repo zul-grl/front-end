@@ -1,6 +1,8 @@
-import Email from "../components/Email";
+import AuthFlow from "../components/AuthFlow";
 
-const Search = () => {
-  return <Email />;
+
+const SignUpPage = () => {
+  return <AuthFlow initialStep="email" />;
 };
-export default Search;
+
+export default SignUpPage;

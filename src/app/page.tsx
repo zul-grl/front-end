@@ -11,7 +11,7 @@ export default function Home() {
     <div className=" bg-[#404040]">
       <Header />
       <Categories />
-      <MenuContainer />
+      {/* <MenuContainer /> */}
       <Footer />
     </div>
   );
