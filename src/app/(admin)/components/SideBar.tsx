@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 const SideBar = () => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col gap-10 p-5 items-center">
       <div className="flex">
         <img className="w-[46px]" src="/logo.png" alt="" />
         <div>
