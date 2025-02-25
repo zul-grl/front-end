@@ -4,35 +4,30 @@ import Email from "./Email";
 import CreatePassword from "./CreatePass";
 import ResetPassword from "./ResetPassword";
 import ChangePassword from "./ChangePassword";
-import Login from "./Login"; // Import the Login component
+import Login from "./Login";
 
 type AuthStep =
-  | "email" // Sign-up: Email step
-  | "createPassword" // Sign-up: Create password step
-  | "resetPassword" // Forgot password: Reset password step
-  | "changePassword" // Forgot password: Change password step
-  | "login"; // Login step
+  | "email"
+  | "createPassword"
+  | "login"
+  | "resetPassword"
+  | "changePassword";
 
 const AuthFlow = ({ initialStep }: { initialStep: AuthStep }) => {
   const [step, setStep] = useState<AuthStep>(initialStep);
 
   const handleNext = (nextStep: AuthStep) => {
-    setStep(nextStep);
+    setStep(nextStep); // Only update the internal step state
   };
 
   const handleBack = (previousStep: AuthStep) => {
-    setStep(previousStep);
+    setStep(previousStep); // Only update the internal step state
   };
 
   const renderStep = () => {
     switch (step) {
       case "email":
-        return (
-          <Email
-            onNext={() => handleNext("createPassword")}
-            onBack={() => handleBack("login")}
-          />
-        );
+        return <Email onNext={() => handleNext("createPassword")} />;
       case "createPassword":
         return (
           <CreatePassword
@@ -40,6 +35,8 @@ const AuthFlow = ({ initialStep }: { initialStep: AuthStep }) => {
             onBack={() => handleBack("email")}
           />
         );
+      case "login":
+        return <Login onBack={() => handleBack("createPassword")} />;
       case "resetPassword":
         return (
           <ResetPassword
@@ -48,11 +45,9 @@ const AuthFlow = ({ initialStep }: { initialStep: AuthStep }) => {
           />
         );
       case "changePassword":
-        return <ChangePassword onBack={() => handleBack("resetPassword")} />;
-      case "login":
         return (
-          <Login
-            onNext={() => handleNext("email")}
+          <ChangePassword
+            onNext={() => handleNext("login")}
             onBack={() => handleBack("resetPassword")}
           />
         );
@@ -63,4 +58,5 @@ const AuthFlow = ({ initialStep }: { initialStep: AuthStep }) => {
 
   return <div>{renderStep()}</div>;
 };
+
 export default AuthFlow;

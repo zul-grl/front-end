@@ -1,9 +1,9 @@
-import { DataTableDemo } from "../components/OrderInfo";
+import { FoodOrderTable } from "../components/OrderInfo";
 
 const OrderPage = () => {
   return (
     <div>
-      <DataTableDemo />
+      <FoodOrderTable />
     </div>
   );
 };

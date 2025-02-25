@@ -32,8 +32,8 @@ const ResetPassword = ({ onNext, onBack }: ResetPasswordProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values); // Log form values (no API call)
-    onNext(); // Move to the next step
+    console.log(values);
+    onNext();
   };
 
   return (

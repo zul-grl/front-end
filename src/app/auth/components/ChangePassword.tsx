@@ -20,10 +20,11 @@ const formSchema = z.object({
 });
 
 interface ChangePasswordProps {
+  onNext: () => void;
   onBack: () => void;
 }
 
-const ChangePassword = ({ onBack }: ChangePasswordProps) => {
+const ChangePassword = ({ onNext, onBack }: ChangePasswordProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,8 +34,8 @@ const ChangePassword = ({ onBack }: ChangePasswordProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values); // Log form values (no API call)
-    // No onNext here, as this is the final step
+    console.log(values);
+    onNext();
   };
 
   return (

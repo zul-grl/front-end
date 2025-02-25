@@ -21,9 +21,9 @@ const formSchema = z.object({
 
 interface EmailProps {
   onNext: () => void;
-  onBack: () => void;
 }
-const Email = ({ onNext, onBack }: EmailProps) => {
+
+const Email = ({ onNext }: EmailProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,16 +32,16 @@ const Email = ({ onNext, onBack }: EmailProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values); // Log form values (no API call)
-    onNext(); // Move to the next step
+    console.log(values);
+    onNext();
   };
 
   return (
     <div className="flex flex-col gap-5">
-      <Link href="/">
+      <Link href={"/"}>
         <Button variant="outline" size="icon">
           <ChevronLeft />
-        </Button>
+        </Button>{" "}
       </Link>
       <h3 className="font-semibold text-[24px]">Create your account</h3>
       <p className="text-[#71717A]">Sign up to explore your favorite dishes.</p>

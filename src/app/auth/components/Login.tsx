@@ -20,15 +20,12 @@ const formSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-type FormValues = z.infer<typeof formSchema>;
-
 interface LoginProps {
-  onNext: () => void;
   onBack: () => void;
 }
 
-const Login = ({ onNext, onBack }: LoginProps) => {
-  const form = useForm<FormValues>({
+const Login = ({ onBack }: LoginProps) => {
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -36,19 +33,20 @@ const Login = ({ onNext, onBack }: LoginProps) => {
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values); // Log form values (no API call)
-    onNext(); // Move to the next step
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log(values);
   };
 
   return (
     <div className="flex flex-col gap-5 p-4 max-w-md mx-auto">
-      <Link href={"/"}>
-        <Button variant="outline" size="icon" type="button">
-          <ChevronLeft className="h-4 w-4" />
-        </Button>{" "}
-      </Link>
-
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={onBack}
+        className="focus:outline-none focus:ring-0"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </Button>
       <h3 className="text-2xl font-semibold">Log in</h3>
       <p className="text-zinc-500">Log in to enjoy your favorite dishes.</p>
 
@@ -65,6 +63,7 @@ const Login = ({ onNext, onBack }: LoginProps) => {
                     type="email"
                     placeholder="Enter your email address"
                     {...field}
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </FormControl>
                 <FormMessage />
@@ -79,29 +78,41 @@ const Login = ({ onNext, onBack }: LoginProps) => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    {...field}
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Link href="/auth/reset-password">
-            <p className="text-blue-600 cursor-pointer hover:underline">
-              Forgot password?
-            </p>
+          <div className="flex justify-between items-center">
+            <Link href="/auth/reset-password">
+              <p className="text-blue-600 cursor-pointer hover:underline text-sm">
+                Forgot password?
+              </p>
+            </Link>
+          </div>
+          <Link href={"/"}>
+            {" "}
+            <Button
+              type="submit"
+              className="w-full py-3 mt-4 focus:outline-none focus:ring-0"
+            >
+              Let's Go
+            </Button>
           </Link>
-
-          <Button type="submit" className="w-full">
-            Let's Go
-          </Button>
         </form>
       </Form>
 
       <div className="flex gap-2 justify-center">
-        <p className="text-zinc-500">Don't have an account?</p>
+        <p className="text-zinc-500 text-sm">Don't have an account?</p>
         <Link href="/auth/signup">
-          <p className="text-blue-600 hover:underline">Sign up</p>
+          <p className="text-blue-600 hover:underline text-sm">Sign up</p>
         </Link>
       </div>
     </div>
