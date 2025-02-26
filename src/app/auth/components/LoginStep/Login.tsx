@@ -22,9 +22,10 @@ const formSchema = z.object({
 
 interface LoginProps {
   onBack: () => void;
+  onNext: () => void;
 }
 
-const Login = ({ onBack }: LoginProps) => {
+const Login = ({ onBack, onNext }: LoginProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -97,15 +98,14 @@ const Login = ({ onBack }: LoginProps) => {
               </p>
             </Link>
           </div>
-          <Link href={"/"}>
-            {" "}
-            <Button
-              type="submit"
-              className="w-full py-3 mt-4 focus:outline-none focus:ring-0"
-            >
-              Let's Go
-            </Button>
-          </Link>
+
+          <Button
+            onClick={onNext}
+            type="submit"
+            className="w-full py-3 mt-4 focus:outline-none focus:ring-0"
+          >
+            Let's Go
+          </Button>
         </form>
       </Form>
 

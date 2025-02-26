@@ -1,5 +1,4 @@
-import AuthFlow from "../components/AuthFlow";
-
+import AuthFlow from "../components/HandleSteps/AuthFlow";
 
 const SignUpPage = () => {
   return <AuthFlow initialStep="email" />;

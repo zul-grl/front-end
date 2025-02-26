@@ -3,8 +3,9 @@ export type CardProps = {
   image: string;
   name: string;
   description: string;
-  price: string;
+  price: number;
   id: number;
+  category: string;
 };
 const Card = ({ image, name, id, description, price }: CardProps) => {
   return (

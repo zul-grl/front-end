@@ -1,4 +1,4 @@
-import { FoodOrderTable } from "../components/OrderInfo";
+import { FoodOrderTable } from "../components/Order/OrderInfo";
 
 const OrderPage = () => {
   return (
