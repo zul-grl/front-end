@@ -28,27 +28,25 @@ const Categories = () => {
   };
 
   return (
-    <div>
-      <ToggleGroup type="single" className="flex gap-5">
+    <ToggleGroup type="single" className="flex gap-5">
+      <ToggleGroupItem
+        className="bg-white text-black rounded-full data-[state=on]:bg-red-500 data-[state=on]:text-white"
+        value="all"
+        onClick={() => handleCategoryClick("all")}
+      >
+        All dishes
+      </ToggleGroupItem>
+      {categories.map((category: FoodCategory) => (
         <ToggleGroupItem
+          key={category._id}
           className="bg-white text-black rounded-full data-[state=on]:bg-red-500 data-[state=on]:text-white"
-          value="all"
-          onClick={() => handleCategoryClick("all")}
+          value={category._id}
+          onClick={() => handleCategoryClick(category._id)}
         >
-          All dishes
+          {category.categoryName}
         </ToggleGroupItem>
-        {categories.map((category: FoodCategory) => (
-          <ToggleGroupItem
-            key={category._id}
-            className="bg-white text-black rounded-full data-[state=on]:bg-red-500 data-[state=on]:text-white"
-            value={category._id}
-            onClick={() => handleCategoryClick(category._id)}
-          >
-            {category.categoryName}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
-    </div>
+      ))}
+    </ToggleGroup>
   );
 };
 

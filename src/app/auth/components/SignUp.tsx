@@ -15,6 +15,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -32,7 +33,8 @@ const SignUpPage = () => {
       confirmPassword: "",
     },
   });
-
+  const onNext = () => router.push("/auth/signup");
+  const onBack = () => router.push("/");
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (values.password !== values.confirmPassword) {
@@ -49,33 +51,20 @@ const SignUpPage = () => {
         isVerified: false,
       };
 
-      const response = await fetch("http://localhost:4000/user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await axios.post("http://localhost:4000/user", userData);
 
-      if (response.ok) {
+      if (response) {
         router.push("/auth/login");
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create user");
       }
     } catch (error) {
       console.error("Error during signup:", error);
-      form.setError("root", {
-        type: "manual",
-        message: "An error occurred during signup. Please try again.",
-      });
     }
   };
 
   return (
     <div className="flex flex-col gap-5">
       <Link href="/">
-        <Button variant="outline" size="icon">
+        <Button variant="outline" onClick={onBack} size="icon">
           <ChevronLeft />
         </Button>
       </Link>
@@ -132,8 +121,9 @@ const SignUpPage = () => {
               </FormItem>
             )}
           />
-
-          <Button type="submit">Let's Go</Button>
+          <Button onClick={onNext} type="submit">
+            Let's Go
+          </Button>
         </form>
       </Form>
       <div className="flex gap-2">

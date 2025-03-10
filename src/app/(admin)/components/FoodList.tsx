@@ -60,15 +60,14 @@ const FoodList = ({
                   className="p-4 border-2 rounded-3xl bg-[#FFFFFF] w-[260px] h-[240px]"
                 >
                   <div className="relative">
-                    <Image
+                    <img
                       alt=""
                       width={1000}
                       height={1000}
                       className="h-[130px] w-[100%] mb-2 object-cover rounded-2xl "
                       src={food.image}
                     />
-                    <DishInfo
-                    />
+                    <DishInfo />
                   </div>
                   <div>
                     <div className="flex justify-between">

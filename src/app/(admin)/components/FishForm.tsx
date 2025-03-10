@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { FoodCategory } from "@/app/_util/type";
 import {
   Dialog,
   DialogTrigger,
@@ -30,7 +29,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   foodName: z.string().min(1, "Dish name is required"),
-  category: z.string().min(1, "Category is required"),
   price: z.string().min(1, "Price is required"),
   ingredients: z.string().min(1, "Ingredients are required"),
   image: z.instanceof(File).optional(),
@@ -42,35 +40,16 @@ interface AddDishDialogProps {
 }
 
 const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
-  const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  const PRESET_NAME = "food-delivary-app";
-  const CLOUDINARY_NAME = "dzb3xzqxv";
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       foodName: "",
-      category: categoryId,
       price: "",
       ingredients: "",
     },
   });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<{ categories: FoodCategory[] }>(
-          "http://localhost:4000/food-category"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -80,38 +59,21 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
     }
   };
 
-  const uploadImage = async (file: File) => {
-    const imageData = new FormData();
-    imageData.append("file", file);
-    imageData.append("upload_preset", PRESET_NAME);
-
-    try {
-      const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`,
-        imageData
-      );
-      return response.data.secure_url;
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      return null;
-    }
-  };
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const imageUrl = values.image ? await uploadImage(values.image) : null;
-
-    const dishData = {
-      foodName: values.foodName,
-      category: values.category,
-      price: parseFloat(values.price),
-      ingredients: values.ingredients,
-      image: imageUrl,
-    };
+    const formData = new FormData();
+    formData.append("foodName", values.foodName);
+    formData.append("category", categoryId);
+    formData.append("price", values.price);
+    formData.append("ingredients", values.ingredients);
+    if (values.image) {
+      formData.append("image", values.image);
+    }
 
     try {
-      await axios.post("http://localhost:4000/food", dishData);
+      await axios.post("http://localhost:4000/food", formData);
       form.reset();
       setImagePreview(null);
+      alert("Dish added successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -140,44 +102,42 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex gap-4">
-              <FormField
-                control={form.control}
-                name="foodName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Food name</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full"
-                        placeholder="Type food name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="foodName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Food name</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="w-full"
+                      placeholder="Type food name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Food price</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="w-full"
-                        type="text"
-                        placeholder="Enter price..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Food price</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="w-full"
+                      type="text"
+                      placeholder="Enter price..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -196,6 +156,7 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="image"
@@ -225,7 +186,6 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
                             className="hidden"
                             id="image-upload"
                           />
-
                           <p className="text-sm text-gray-500">
                             Choose a file or drag & drop it here
                           </p>
