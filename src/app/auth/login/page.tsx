@@ -1,7 +1,7 @@
-import AuthFlow from "../components/HandleSteps/AuthFlow";
+import Login from "../components/Login";
 
 const LoginPage = () => {
-  return <AuthFlow initialStep="login" />;
+  return <Login />;
 };
 
 export default LoginPage;

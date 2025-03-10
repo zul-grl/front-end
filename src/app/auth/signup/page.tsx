@@ -1,7 +1,7 @@
-import AuthFlow from "../components/HandleSteps/AuthFlow";
+import SignUpPage from "../components/SignUp";
 
-const SignUpPage = () => {
-  return <AuthFlow initialStep="email" />;
+const SignUp = () => {
+  return <SignUpPage />;
 };
 
-export default SignUpPage;
+export default SignUp;

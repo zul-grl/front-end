@@ -1,9 +1,10 @@
-import { FoodOrderTable } from "../components/Order/OrderInfo";
+import { OrderInfo } from "../components/OrderInfo";
+
 
 const OrderPage = () => {
   return (
     <div>
-      <FoodOrderTable />
+      <OrderInfo />
     </div>
   );
 };

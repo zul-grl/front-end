@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const SideBar = () => {
   return (
-    <div className="flex w-[205px] h-screen flex-col gap-10 p-7 items-center">
+    <div className="sticky top-0 w-[205px] h-screen flex flex-col gap-10 p-7 items-center bg-white">
       <Link href={"/"}>
         <div className="flex gap-2">
           <img

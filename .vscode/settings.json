@@ -1,0 +1,8 @@
+{
+  "github.copilot.nextEditSuggestions.enabled": false,
+  "github.copilot.chat.completionContext.typescript.mode": "off",
+  "github.copilot.chat.edits.suggestRelatedFilesForTests": false,
+  "github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": false,
+  "github.copilot.chat.setupTests.enabled": false,
+  "github.copilot.chat.useProjectTemplates": false
+}

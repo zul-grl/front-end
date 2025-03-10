@@ -2,12 +2,12 @@ import Image from "next/image";
 export type CardProps = {
   image: string;
   name: string;
-  description: string;
+  ingredients: string;
   price: number;
-  id: number;
   category: string;
+  id: string;
 };
-const Card = ({ image, name, id, description, price }: CardProps) => {
+const Card = ({ id, image, name, ingredients, price }: CardProps) => {
   return (
     <div
       key={id}
@@ -23,9 +23,9 @@ const Card = ({ image, name, id, description, price }: CardProps) => {
       <div>
         <div className="flex justify-between">
           <h3 className="text-red-500 font-semibold text-2xl">{name}</h3>
-          <h3 className="text-black font-semibold text-xl">{price}</h3>
+          <h3 className="text-black font-semibold text-xl">${price}</h3>
         </div>
-        <p>{description}</p>
+        <p>{ingredients}</p>
       </div>
     </div>
   );

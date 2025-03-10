@@ -55,8 +55,8 @@ const initialData: FoodOrder[] = [
   },
 ];
 
-export function FoodOrderTable() {
-  const [data, setData] = React.useState<FoodOrder[]>(initialData); // Move data state here
+export function OrderInfo() {
+  const [data, setData] = React.useState<FoodOrder[]>(initialData);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

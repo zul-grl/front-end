@@ -14,18 +14,17 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-interface LoginProps {
-  onBack: () => void;
-  onNext: () => void;
-}
-
-const Login = ({ onBack, onNext }: LoginProps) => {
+const Login = () => {
+  const router = useRouter();
+  const onNext = () => router.push("/");
+  const onBack = () => router.push("/auth/signup");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -100,7 +99,7 @@ const Login = ({ onBack, onNext }: LoginProps) => {
           </div>
 
           <Button
-            onClick={onNext}
+            onClick={form.handleSubmit(onNext)}
             type="submit"
             className="w-full py-3 mt-4 focus:outline-none focus:ring-0"
           >

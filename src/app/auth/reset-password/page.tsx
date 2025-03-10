@@ -1,7 +1,8 @@
-import AuthFlow from "../components/HandleSteps/AuthFlow";
+
+import ResetChangePassword from "../components/ResetChangePass";
 
 const ResetPasswordPage = () => {
-  return <AuthFlow initialStep="resetPassword" />;
+  return <ResetChangePassword />;
 };
 
 export default ResetPasswordPage;
