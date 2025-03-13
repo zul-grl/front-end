@@ -44,6 +44,7 @@ interface AddDishDialogProps {
 const DishInfo = () => {
   const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const PRESET_NAME = "food-delivary-app";
   const CLOUDINARY_NAME = "dzb3xzqxv";
@@ -61,6 +62,7 @@ const DishInfo = () => {
     };
     fetchData();
   }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,19 +71,7 @@ const DishInfo = () => {
       ingredients: "",
     },
   });
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.patch<{ categories: FoodCategory[] }>(
-          "http://localhost:4000/food-category/:foodCategoryId"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -89,6 +79,7 @@ const DishInfo = () => {
       setImagePreview(URL.createObjectURL(file));
     }
   };
+
   const uploadImage = async (file: File) => {
     const imageData = new FormData();
     imageData.append("file", file);
@@ -105,7 +96,9 @@ const DishInfo = () => {
       return null;
     }
   };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
     const imageUrl = values.image ? await uploadImage(values.image) : null;
 
     const dishData = {
@@ -120,8 +113,12 @@ const DishInfo = () => {
       await axios.post("http://localhost:4000/food", dishData);
       form.reset();
       setImagePreview(null);
+      setLoading(false);
+      // Close the dialog after successful submission
+      document.getElementById("close-dialog")?.click();
     } catch (error) {
       console.error("Error submitting form:", error);
+      setLoading(false);
     }
   };
 
@@ -254,13 +251,16 @@ const DishInfo = () => {
             )}
             <div className="flex justify-end space-x-2">
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button id="close-dialog" variant="outline">
+                  Cancel
+                </Button>
               </DialogClose>
               <Button
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={loading}
               >
-                Save
+                {loading ? "Saving..." : "Save"}
               </Button>
             </div>
           </form>

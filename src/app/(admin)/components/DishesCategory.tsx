@@ -1,4 +1,5 @@
 "use client";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,10 +15,16 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, X } from "lucide-react";
+import { Plus, X, MoreVertical, Edit, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { FoodCategory } from "@/app/_util/type";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const DishesCategory = ({
   setSelectedCategory,
@@ -26,6 +33,9 @@ const DishesCategory = ({
 }) => {
   const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [newCategoryName, setNewCategoryName] = useState<string>("");
+  const [editCategoryId, setEditCategoryId] = useState<string | null>(null);
+  const [editCategoryName, setEditCategoryName] = useState<string>("");
+  const [deleteCategoryId, setDeleteCategoryId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +70,43 @@ const DishesCategory = ({
     }
   };
 
+  const handleEditCategory = async () => {
+    try {
+      if (!editCategoryId || !editCategoryName.trim()) {
+        alert("Category name cannot be empty");
+        return;
+      }
+      const response = await axios.patch<{ category: FoodCategory }>(
+        `http://localhost:4000/food-category/${editCategoryId}`,
+        {
+          categoryName: editCategoryName,
+        }
+      );
+      setCategories(
+        categories.map((cat) =>
+          cat._id === editCategoryId ? response.data.category : cat
+        )
+      );
+      setEditCategoryId(null);
+      setEditCategoryName("");
+    } catch (error) {
+      console.error("Error editing category:", error);
+    }
+  };
+
+  const handleDeleteCategory = async () => {
+    try {
+      if (!deleteCategoryId) return;
+      await axios.delete(
+        `http://localhost:4000/food-category/${deleteCategoryId}`
+      );
+      setCategories(categories.filter((cat) => cat._id !== deleteCategoryId));
+      setDeleteCategoryId(null);
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-end">
@@ -89,6 +136,34 @@ const DishesCategory = ({
                 value={category._id}
               >
                 {category.categoryName}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 p-0 ml-2"
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setEditCategoryId(category._id);
+                        setEditCategoryName(category.categoryName);
+                      }}
+                    >
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setDeleteCategoryId(category._id)}
+                    >
+                      <Trash className="mr-2 h-4 w-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
@@ -127,6 +202,62 @@ const DishesCategory = ({
           </AlertDialog>
         </div>
       </div>
+      <AlertDialog
+        open={!!editCategoryId}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditCategoryId(null);
+            setEditCategoryName("");
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex justify-between">
+              <AlertDialogTitle>Edit Category</AlertDialogTitle>
+              <AlertDialogCancel className="rounded-full p-2">
+                <X />
+              </AlertDialogCancel>
+            </div>
+          </AlertDialogHeader>
+          <Input
+            type="text"
+            placeholder="Category Name"
+            value={editCategoryName}
+            onChange={(e) => setEditCategoryName(e.target.value)}
+          />
+
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={handleEditCategory}>
+              Save
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog
+        open={!!deleteCategoryId}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeleteCategoryId(null);
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              category.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteCategory}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

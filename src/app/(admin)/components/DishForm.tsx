@@ -41,6 +41,7 @@ interface AddDishDialogProps {
 
 const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,6 +61,7 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("foodName", values.foodName);
     formData.append("category", categoryId);
@@ -73,9 +75,13 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
       await axios.post("http://localhost:4000/food", formData);
       form.reset();
       setImagePreview(null);
+      setLoading(false);
+      // Close the dialog after successful submission
+      document.getElementById("close-dialog")?.click();
       alert("Dish added successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
+      setLoading(false);
     }
   };
 
@@ -200,13 +206,16 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
 
             <div className="flex justify-end space-x-2">
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button id="close-dialog" variant="outline">
+                  Cancel
+                </Button>
               </DialogClose>
               <Button
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={loading}
               >
-                Add dish
+                {loading ? "Adding..." : "Add dish"}
               </Button>
             </div>
           </form>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { LayoutDashboard, Settings, Truck } from "lucide-react";
 import Link from "next/link";
 
 const SideBar = () => {
@@ -20,13 +21,19 @@ const SideBar = () => {
         </div>
       </Link>
       <Link href={"/food-menu"}>
-        <Button>Food menu</Button>
+        <Button className="rounded-full">
+          <LayoutDashboard /> Food menu
+        </Button>
       </Link>
       <Link href={"/orders"}>
-        <Button>Orders</Button>
+        <Button className="rounded-full">
+          <Truck /> Orders
+        </Button>
       </Link>
       <Link href={"/settings"}>
-        <Button>Settings</Button>
+        <Button className="rounded-full">
+          <Settings /> Settings
+        </Button>
       </Link>
     </div>
   );

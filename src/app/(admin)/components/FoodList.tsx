@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { FoodCategory, FoodItem } from "@/app/_util/type";
-import AddDishDialog from "./FishForm";
+import AddDishDialog from "./DishForm";
 import { Button } from "@/components/ui/button";
 import { Pen } from "lucide-react";
 import DishInfo from "./DishInfo";
