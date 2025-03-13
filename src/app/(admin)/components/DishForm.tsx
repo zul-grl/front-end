@@ -62,21 +62,19 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
-    const formData = new FormData();
-    formData.append("foodName", values.foodName);
-    formData.append("category", categoryId);
-    formData.append("price", values.price);
-    formData.append("ingredients", values.ingredients);
-    if (values.image) {
-      formData.append("image", values.image);
-    }
-
+    const formData = {
+      foodName: values.foodName,
+      category: categoryId,
+      price: parseFloat(values.price),
+      ingredients: values.ingredients,
+      image: imagePreview,
+    };
+    console.log(formData);
     try {
       await axios.post("http://localhost:4000/food", formData);
       form.reset();
       setImagePreview(null);
       setLoading(false);
-      // Close the dialog after successful submission
       document.getElementById("close-dialog")?.click();
       alert("Dish added successfully!");
     } catch (error) {

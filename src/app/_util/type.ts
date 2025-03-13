@@ -8,7 +8,7 @@ export type FoodItem = {
   _id: string;
   foodName: string;
   category: FoodCategory;
-  price: number;
+  price: string;
   image: string;
   ingredients: string;
   createdAt: Date;

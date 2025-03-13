@@ -67,7 +67,7 @@ const FoodList = ({
                       className="h-[130px] w-[100%] mb-2 object-cover rounded-2xl "
                       src={food.image}
                     />
-                    <DishInfo />
+                    <DishInfo food={food} />
                   </div>
                   <div>
                     <div className="flex justify-between">

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { FoodCategory } from "@/app/_util/type";
+import { FoodCategory, FoodItem } from "@/app/_util/type";
 import {
   Dialog,
   DialogTrigger,
@@ -41,7 +41,7 @@ interface AddDishDialogProps {
   categoryId: string;
 }
 
-const DishInfo = () => {
+const DishInfo = ({ food }: { food: FoodItem }) => {
   const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -63,12 +63,18 @@ const DishInfo = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (food) {
+      form.setValue("foodName", food.foodName);
+    }
+  }, []);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      foodName: "",
-      price: "",
-      ingredients: "",
+      foodName: food?.foodName,
+      price: food?.price,
+      ingredients: food?.ingredients,
+      category: food?.category?.categoryName,
     },
   });
 
@@ -104,18 +110,15 @@ const DishInfo = () => {
     const dishData = {
       foodName: values.foodName,
       category: values.category,
-      price: parseFloat(values.price),
+      price: values.price,
       ingredients: values.ingredients,
       image: imageUrl,
     };
-
     try {
-      await axios.post("http://localhost:4000/food", dishData);
+      await axios.patch(`http://localhost:4000/food/${food._id}`, dishData);
       form.reset();
       setImagePreview(null);
       setLoading(false);
-      // Close the dialog after successful submission
-      document.getElementById("close-dialog")?.click();
     } catch (error) {
       console.error("Error submitting form:", error);
       setLoading(false);
@@ -184,13 +187,7 @@ const DishInfo = () => {
                 <FormItem>
                   <FormLabel>Price ($)</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      placeholder="Enter price"
-                      {...field}
-                    />
+                    <Input type="text" placeholder="Enter price" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -251,9 +248,7 @@ const DishInfo = () => {
             )}
             <div className="flex justify-end space-x-2">
               <DialogClose asChild>
-                <Button id="close-dialog" variant="outline">
-                  Cancel
-                </Button>
+                <Button variant="outline">Cancel</Button>
               </DialogClose>
               <Button
                 type="submit"
