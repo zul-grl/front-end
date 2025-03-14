@@ -44,7 +44,7 @@ const FoodList = ({
       : categories.filter((cat) => cat._id === selectedCategory);
 
   return (
-    <div className="p-4 flex flex-col gap-3 rounded-xl bg-white">
+    <div className="p-4 flex flex-col gap-3 rounded-xl bg-white ">
       {displayedCategories.map((cat) => (
         <div key={cat._id} className="space-y-4">
           <h4 className="text-xl font-bold">{cat.categoryName}</h4>
