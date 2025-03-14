@@ -108,7 +108,7 @@ const DishesCategory = ({
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 w-full">
       <div className="flex justify-end">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -119,6 +119,7 @@ const DishesCategory = ({
         <h4 className="font-semibold">Dishes category</h4>
         <div className="flex flex-wrap gap-2">
           <ToggleGroup
+            asChild
             type="single"
             className="flex justify-start flex-wrap gap-2"
             onValueChange={(value) => setSelectedCategory(value)}
@@ -133,9 +134,9 @@ const DishesCategory = ({
               <ToggleGroupItem
                 key={index}
                 className="bg-white text-black rounded-full border data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-white"
-                value={category._id}
+                value={category?._id}
               >
-                {category.categoryName}
+                {category?.categoryName}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -149,15 +150,15 @@ const DishesCategory = ({
                   <DropdownMenuContent>
                     <DropdownMenuItem
                       onClick={() => {
-                        setEditCategoryId(category._id);
-                        setEditCategoryName(category.categoryName);
+                        setEditCategoryId(category?._id);
+                        setEditCategoryName(category?.categoryName);
                       }}
                     >
                       <Edit className="mr-2 h-4 w-4" />
                       Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => setDeleteCategoryId(category._id)}
+                      onClick={() => setDeleteCategoryId(category?._id)}
                     >
                       <Trash className="mr-2 h-4 w-4" />
                       Delete

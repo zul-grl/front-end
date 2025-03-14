@@ -9,7 +9,7 @@ const AdminPage = () => {
     "all"
   );
   return (
-    <div className="container flex flex-col gap-3 p-8 bg-secondary">
+    <div className="flex flex-col gap-3 p-10 bg-secondary w-full">
       <DishesCategory setSelectedCategory={setSelectedCategory} />
       <FoodList selectedCategory={selectedCategory} />
     </div>

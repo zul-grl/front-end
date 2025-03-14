@@ -28,9 +28,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
-  foodName: z.string().min(1, "Dish name is required"),
-  price: z.string().min(1, "Price is required"),
-  ingredients: z.string().min(1, "Ingredients are required"),
+  foodName: z.string().min(1),
+  price: z.string().min(1),
+  ingredients: z.string().min(1),
   image: z.instanceof(File).optional(),
 });
 
@@ -65,7 +65,7 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
     const formData = {
       foodName: values.foodName,
       category: categoryId,
-      price: parseFloat(values.price),
+      price: values.price,
       ingredients: values.ingredients,
       image: imagePreview,
     };
