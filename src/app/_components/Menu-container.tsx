@@ -31,7 +31,7 @@ const MenuContainer = () => {
       : foods.filter((food) => food.category._id === selectedCategory);
 
   return (
-    <div className="max-w-[1340px] m-auto grid grid-cols-3 gap-8 p-4">
+    <div className="max-w-[1340px] m-auto flex flex-wrap justify-center gap-4 p-4">
       {filteredFoods.map((food) => (
         <Card
           key={food._id}

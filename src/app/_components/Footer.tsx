@@ -1,7 +1,9 @@
+"use client";
+
 const Footer = () => {
   return (
-    <div className="h-[755px] bg-primary pt-[60px] w-full">
-      <div className="h-[92px] bg-[#EF4444] whitespace-nowrap flex gap-[34px] overflow-hidden justify-center items-center w-full">
+    <div className="bg-primary pt-12 w-full">
+      <div className="h-[92px] bg-[#EF4444] whitespace-nowrap flex overflow-hidden justify-center items-center w-full">
         <div className="flex gap-7 animate-scroll">
           {Array.from({ length: 14 }, (_, i) => (
             <h2 key={i} className="text-[30px] text-white">
@@ -10,60 +12,81 @@ const Footer = () => {
           ))}
         </div>
       </div>
-      <div className="px-[220px] py-[88px]">
-        <div className="flex gap-[220px]">
-          <div className="flex flex-col items-center">
-            <img className="w-[46px]" src="/logo.png" alt="" />
-            <div>
-              <div className="flex">
+
+      <div className="px-4 md:px-8 lg:px-16 xl:px-[220px] py-12 md:py-[88px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div className="flex flex-col items-center sm:items-start">
+            <img className="w-[46px]" src="/logo.png" alt="NomNom Logo" />
+            <div className="mt-2 text-center sm:text-left">
+              <div className="flex justify-center sm:justify-start">
                 <h4 className="font-semibold text-secondary">Nom</h4>
                 <h4 className="text-[#EF4444] font-semibold">Nom</h4>
               </div>
-              <p className=" text-secondary text-sm">Swift delivery</p>
+              <p className="text-secondary text-sm">Swift delivery</p>
             </div>
           </div>
+
           <div className="text-secondary flex flex-col gap-2">
-            <p className="text-[#71717A]">NOMNOM</p>
-            <p>Home</p>
-            <p>Contact us</p>
-            <p>Delivery zone</p>
+            <p className="text-[#71717A] font-medium">NOMNOM</p>
+            <p className="hover:text-[#EF4444] cursor-pointer">Home</p>
+            <p className="hover:text-[#EF4444] cursor-pointer">Contact us</p>
+            <p className="hover:text-[#EF4444] cursor-pointer">Delivery zone</p>
           </div>
-          <div className="flex gap-[220px]">
-            <div className="text-secondary flex flex-col gap-2">
-              <p className="text-[#71717A]">MENU</p>
-              <p>Appetizers</p>
-              <p>Salads</p>
-              <p>Pizzas</p>
-              <p>Lunch favorites</p>
-              <p>Main dishes</p>
-            </div>
-            <div className="text-secondary flex flex-col gap-2">
-              <p>&nbsp;</p>
-              <p>Side dish </p>
-              <p>Brunch</p>
-              <p>Desserts</p>
-              <p>Beverages</p>
-              <p>Fish & Sea foods</p>
+
+          <div className="text-secondary">
+            <p className="text-[#71717A] font-medium mb-2">MENU</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+              <p className="hover:text-[#EF4444] cursor-pointer">Appetizers</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">Side dish</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">Salads</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">Brunch</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">Pizzas</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">Desserts</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">
+                Lunch favorites
+              </p>
+              <p className="hover:text-[#EF4444] cursor-pointer">Beverages</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">Main dishes</p>
+              <p className="hover:text-[#EF4444] cursor-pointer">
+                Fish & Sea foods
+              </p>
             </div>
           </div>
+
           <div>
-            <p className="text-[#71717A]">FOLLOW US</p>
-            <div className="flex gap-4 mt-4">
-              <img className="w-[28px]" src="/face.png" alt="" />
-              <img className="w-[28px]" src="/instagram.png" alt="" />
+            <p className="text-[#71717A] font-medium mb-4">FOLLOW US</p>
+            <div className="flex gap-4">
+              <img
+                className="w-[28px] cursor-pointer hover:opacity-80 transition-opacity"
+                src="/face.png"
+                alt="Facebook"
+              />
+              <img
+                className="w-[28px] cursor-pointer hover:opacity-80 transition-opacity"
+                src="/instagram.png"
+                alt="Instagram"
+              />
             </div>
           </div>
         </div>
       </div>
-      <div className="px-[220px] py-8">
-        <div className="border-t border-t-[#71717A] flex gap-12 pt-4">
+
+      <div className="px-4 md:px-8 lg:px-16 xl:px-[220px] py-6">
+        <div className="border-t border-t-[#71717A] flex flex-col sm:flex-row gap-4 sm:gap-12 pt-4 flex-wrap">
           <p className="text-[#71717A]">Copyright 2024 © Nomnom LLC</p>
-          <p className="text-[#71717A]">Privacy policy</p>
-          <p className="text-[#71717A]">Terms and conditions</p>
-          <p className="text-[#71717A]">Cookie policy</p>
+          <p className="text-[#71717A] hover:text-[#EF4444] cursor-pointer">
+            Privacy policy
+          </p>
+          <p className="text-[#71717A] hover:text-[#EF4444] cursor-pointer">
+            Terms and conditions
+          </p>
+          <p className="text-[#71717A] hover:text-[#EF4444] cursor-pointer">
+            Cookie policy
+          </p>
         </div>
       </div>
     </div>
   );
 };
+
 export default Footer;

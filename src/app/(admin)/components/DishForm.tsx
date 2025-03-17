@@ -60,26 +60,46 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
     }
   };
 
+  const uploadImage = async (file: File) => {
+    const imageData = new FormData();
+    imageData.append("file", file);
+    imageData.append("upload_preset", "food-delivary-app"); // Replace with your Cloudinary upload preset
+
+    try {
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/dzb3xzqxv/image/upload`, // Replace with your Cloudinary cloud name
+        imageData
+      );
+      return response.data.secure_url;
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return null;
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
-    const formData = {
-      foodName: values.foodName,
-      category: categoryId,
-      price: values.price,
-      ingredients: values.ingredients,
-      image: imagePreview,
-    };
-    console.log(formData);
     try {
+      const imageUrl = values.image ? await uploadImage(values.image) : null;
+
+      const formData = {
+        foodName: values.foodName,
+        category: categoryId,
+        price: values.price,
+        ingredients: values.ingredients,
+        image: imageUrl,
+      };
+
       await axios.post("http://localhost:4000/food", formData);
       form.reset();
       setImagePreview(null);
-      setLoading(false);
-      document.getElementById("close-dialog")?.click();
       alert("Dish added successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
+      alert("Failed to add dish. Please try again.");
+    } finally {
       setLoading(false);
+      document.getElementById("close-dialog")?.click();
     }
   };
 
@@ -164,7 +184,7 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
             <FormField
               control={form.control}
               name="image"
-              render={({ field }) => (
+              render={({}) => (
                 <FormItem>
                   <FormLabel>Image</FormLabel>
                   <FormControl>

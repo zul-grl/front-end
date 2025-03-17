@@ -28,7 +28,7 @@ const Categories = () => {
   };
 
   return (
-    <ToggleGroup type="single" className="flex mt-3 gap-5">
+    <ToggleGroup type="single" className="flex flex-wrap mt-3 gap-2">
       <ToggleGroupItem
         className="bg-white text-black rounded-full data-[state=on]:bg-red-500 data-[state=on]:text-white"
         value="all"

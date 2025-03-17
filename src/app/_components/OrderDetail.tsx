@@ -19,7 +19,7 @@ export function OrderSheet() {
           <ShoppingCart />
         </div>
       </SheetTrigger>
-      <SheetContent className="lg:max-w-lg bg-[#404040] border-none rounded-l-3xl flex flex-col gap-5">
+      <SheetContent className="w-full max-w-lg bg-[#404040] border-none rounded-l-3xl flex flex-col gap-5">
         <SheetHeader>
           <VisuallyHidden>
             <h2>Order details</h2>

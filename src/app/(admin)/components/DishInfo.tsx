@@ -21,7 +21,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Pen, Trash, X } from "lucide-react";
@@ -41,7 +40,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -55,27 +53,32 @@ const formSchema = z.object({
   image: z.union([z.instanceof(File), z.string()]).optional(),
 });
 
-const DishInfo = ({ food }: { food: FoodItem }) => {
+const DishInfo = ({
+  food,
+  fetchData,
+}: {
+  food: FoodItem;
+  fetchData: () => {};
+}) => {
   const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-
   const [error, setError] = useState<string | null>(null);
+
   const PRESET_NAME = "food-delivary-app";
   const CLOUDINARY_NAME = "dzb3xzqxv";
-
+  const fetchCategoryData = async () => {
+    try {
+      const categoriesResponse = await axios.get<{
+        categories: FoodCategory[];
+      }>("http://localhost:4000/food-category");
+      setCategories(categoriesResponse.data.categories);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const categoriesResponse = await axios.get<{
-          categories: FoodCategory[];
-        }>("http://localhost:4000/food-category");
-        setCategories(categoriesResponse.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    fetchCategoryData();
   }, []);
 
   useEffect(() => {
@@ -120,6 +123,7 @@ const DishInfo = ({ food }: { food: FoodItem }) => {
         `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`,
         imageData
       );
+      fetchData();
       return response.data.secure_url;
     } catch (error) {
       console.error("Image upload failed:", error);
@@ -142,21 +146,24 @@ const DishInfo = ({ food }: { food: FoodItem }) => {
         image: imageUrl,
       };
       await axios.patch(`http://localhost:4000/food/${food._id}`, dishData);
-      // console.log(values);
       form.reset();
+      fetchData();
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("Failed to update the dish.");
     }
   };
+
   const handleDeleteFood = async () => {
     try {
       await axios.delete(`http://localhost:4000/food/${food._id}`);
       setOpen(false);
+      fetchData();
     } catch (error) {
       console.error("Error deleting category:", error);
     }
   };
+
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>

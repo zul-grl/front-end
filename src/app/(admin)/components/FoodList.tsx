@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 
 import axios from "axios";
-import Image from "next/image";
 import { FoodCategory, FoodItem } from "@/app/_util/type";
 import AddDishDialog from "./DishForm";
-import { Button } from "@/components/ui/button";
-import { Pen } from "lucide-react";
 import DishInfo from "./DishInfo";
+import Image from "next/image";
 
 const FoodList = ({
   selectedCategory,
@@ -17,25 +15,24 @@ const FoodList = ({
 }) => {
   const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [foods, setFoods] = useState<FoodItem[]>([]);
-
+  const fetchData = async () => {
+    try {
+      const categoriesResponse = await axios.get<{
+        categories: FoodCategory[];
+      }>("http://localhost:4000/food-category");
+      setCategories(categoriesResponse.data.categories);
+      const foodsResponse = await axios.get<{
+        message: string;
+        allFood: FoodItem[];
+      }>("http://localhost:4000/food");
+      console.log("Foods Response:", foodsResponse.data);
+      setFoods(foodsResponse.data.allFood);
+    } catch (error) {
+      console.error(error);
+      setFoods([]);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const categoriesResponse = await axios.get<{
-          categories: FoodCategory[];
-        }>("http://localhost:4000/food-category");
-        setCategories(categoriesResponse.data.categories);
-        const foodsResponse = await axios.get<{
-          message: string;
-          allFood: FoodItem[];
-        }>("http://localhost:4000/food");
-        console.log("Foods Response:", foodsResponse.data);
-        setFoods(foodsResponse.data.allFood);
-      } catch (error) {
-        console.error(error);
-        setFoods([]);
-      }
-    };
     fetchData();
   }, []);
   const displayedCategories =
@@ -60,14 +57,14 @@ const FoodList = ({
                   className="p-4 border-2 rounded-3xl bg-[#FFFFFF] w-[260px] h-[240px]"
                 >
                   <div className="relative">
-                    <img
+                    <Image
                       alt=""
                       width={1000}
                       height={1000}
                       className="h-[130px] w-[100%] mb-2 object-cover rounded-2xl "
                       src={food.image}
                     />
-                    <DishInfo food={food} />
+                    <DishInfo food={food} fetchData={fetchData} />
                   </div>
                   <div>
                     <div className="flex justify-between">

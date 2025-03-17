@@ -37,17 +37,18 @@ const DishesCategory = ({
   const [editCategoryName, setEditCategoryName] = useState<string>("");
   const [deleteCategoryId, setDeleteCategoryId] = useState<string | null>(null);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get<{ categories: FoodCategory[] }>(
+        "http://localhost:4000/food-category"
+      );
+      setCategories(response.data.categories);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<{ categories: FoodCategory[] }>(
-          "http://localhost:4000/food-category"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchData();
   }, []);
 
@@ -65,6 +66,7 @@ const DishesCategory = ({
       );
       setCategories([...categories, response.data.category]);
       setNewCategoryName("");
+      fetchData();
     } catch (error) {
       console.error("Error adding category:", error);
     }
@@ -87,6 +89,7 @@ const DishesCategory = ({
           cat._id === editCategoryId ? response.data.category : cat
         )
       );
+      fetchData();
       setEditCategoryId(null);
       setEditCategoryName("");
     } catch (error) {
@@ -102,6 +105,7 @@ const DishesCategory = ({
       );
       setCategories(categories.filter((cat) => cat._id !== deleteCategoryId));
       setDeleteCategoryId(null);
+      fetchData();
     } catch (error) {
       console.error("Error deleting category:", error);
     }

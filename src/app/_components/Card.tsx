@@ -10,8 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
@@ -20,7 +18,7 @@ export type CardProps = {
   image: string;
   name: string;
   ingredients: string;
-  price: number;
+  price: string;
   category: string;
   id: string;
 };
@@ -28,7 +26,7 @@ export type CardProps = {
 const Card = ({ id, image, name, ingredients, price }: CardProps) => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-
+  const priceAsNumber = parseFloat(price);
   const incrementQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
@@ -42,7 +40,7 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
     try {
       const orderData = {
         user: "USER_ID",
-        totalPrice: price * quantity,
+        totalPrice: priceAsNumber * quantity,
         foodOrderItems: [
           {
             food: id,
@@ -73,13 +71,13 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
       <DialogTrigger asChild>
         <div
           key={id}
-          className="p-4 rounded-3xl flex flex-col gap-2 bg-[#FFFFFF] w-[397px] h-[342px] cursor-pointer"
+          className="p-4 rounded-3xl flex flex-col gap-2 bg-[#FFFFFF] w-full sm:w-[397px] h-[342px] cursor-pointer"
         >
           <Image
             alt={name}
             width={1000}
             height={1000}
-            className="h-[210px] w-[100%] object-cover rounded-2xl"
+            className="h-[210px] w-full object-cover rounded-2xl"
             src={image}
           />
           <div>
@@ -91,7 +89,7 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
           </div>
         </div>
       </DialogTrigger>
-      <DialogContent className="rounded-3xl w-[550px] h-[320px]">
+      <DialogContent className="rounded-3xl w-full sm:w-[550px] h-[320px]">
         <div>
           <DialogHeader hidden>
             <DialogTitle hidden></DialogTitle>
@@ -102,7 +100,7 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
               alt={`${name} detailed image`}
               width={1000}
               height={1000}
-              className="h-[100%] w-[350px] object-cover rounded-xl"
+              className="h-[100%] w-full object-cover rounded-xl"
               src={image}
             />
             <div className="relative w-full">
@@ -115,7 +113,7 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
                   <div className="mb-4">
                     <p className="text-xs">Total price</p>
                     <h3 className="text-black font-semibold text-xl">
-                      ${(price * quantity).toFixed(2)}
+                      ${(priceAsNumber * quantity).toFixed(2)}
                     </h3>
                   </div>
                   <div className="flex items-center gap-4 mb-4">
