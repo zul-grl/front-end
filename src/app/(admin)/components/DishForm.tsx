@@ -37,9 +37,14 @@ const formSchema = z.object({
 interface AddDishDialogProps {
   category: string;
   categoryId: string;
+  fetchData: () => {};
 }
 
-const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
+const AddDishDialog = ({
+  category,
+  categoryId,
+  fetchData,
+}: AddDishDialogProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -63,11 +68,11 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
   const uploadImage = async (file: File) => {
     const imageData = new FormData();
     imageData.append("file", file);
-    imageData.append("upload_preset", "food-delivary-app"); // Replace with your Cloudinary upload preset
+    imageData.append("upload_preset", "food-delivary-app");
 
     try {
       const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/dzb3xzqxv/image/upload`, // Replace with your Cloudinary cloud name
+        `https://api.cloudinary.com/v1_1/dzb3xzqxv/image/upload`,
         imageData
       );
       return response.data.secure_url;
@@ -91,12 +96,11 @@ const AddDishDialog = ({ category, categoryId }: AddDishDialogProps) => {
       };
 
       await axios.post("http://localhost:4000/food", formData);
+      fetchData();
       form.reset();
       setImagePreview(null);
-      alert("Dish added successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Failed to add dish. Please try again.");
     } finally {
       setLoading(false);
       document.getElementById("close-dialog")?.click();

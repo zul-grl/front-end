@@ -8,6 +8,7 @@ const AdminPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     "all"
   );
+
   return (
     <div className="flex flex-col gap-3 p-10 bg-secondary w-full">
       <DishesCategory setSelectedCategory={setSelectedCategory} />

@@ -11,8 +11,8 @@ const MenuCategories = () => {
         height={1000}
         className="object-cover w-full max-h-[570px]"
       />
-      <div className="w-full m-auto p-5">
-        <h2 className="text-2xl font-bold">Categories</h2>
+      <div className="max-w-[1340px] w-full mx-auto flex flex-col p-5">
+        <h2 className="text-2xl font-bold text-white">Categories</h2>
         <Categories />
       </div>
     </div>

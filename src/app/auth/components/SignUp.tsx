@@ -48,10 +48,12 @@ const SignUpPage = () => {
         email: values.email,
         password: values.password,
         role: "USER",
-        isVerified: false,
       };
 
-      const response = await axios.post("http://localhost:4000/user", userData);
+      const response = await axios.post(
+        "http://localhost:4000/auth/sign-up",
+        userData
+      );
 
       if (response) {
         router.push("/auth/login");

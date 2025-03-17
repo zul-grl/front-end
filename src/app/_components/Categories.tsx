@@ -29,17 +29,10 @@ const Categories = () => {
 
   return (
     <ToggleGroup type="single" className="flex flex-wrap mt-3 gap-2">
-      <ToggleGroupItem
-        className="bg-white text-black rounded-full data-[state=on]:bg-red-500 data-[state=on]:text-white"
-        value="all"
-        onClick={() => handleCategoryClick("all")}
-      >
-        All dishes
-      </ToggleGroupItem>
       {categories.map((category: FoodCategory) => (
         <ToggleGroupItem
           key={category._id}
-          className="bg-white text-black rounded-full data-[state=on]:bg-red-500 data-[state=on]:text-white"
+          className="bg-white text-black rounded-full data-[state=on]:bg-red-500 px-6 py-3 data-[state=on]:text-white"
           value={category._id}
           onClick={() => handleCategoryClick(category._id)}
         >

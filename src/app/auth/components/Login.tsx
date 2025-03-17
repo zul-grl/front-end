@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -33,7 +34,13 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const userData = {
+      email: values.email,
+      password: values.email,
+    };
+
+    await axios.post("http://localhost:4000/auth/sign-in", userData);
     console.log(values);
   };
 

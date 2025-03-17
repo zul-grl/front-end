@@ -47,7 +47,11 @@ const FoodList = ({
           <h4 className="text-xl font-bold">{cat.categoryName}</h4>
           <div className="flex flex-wrap gap-4">
             <div className="w-[260px] h-[240px]">
-              <AddDishDialog category={cat.categoryName} categoryId={cat._id} />
+              <AddDishDialog
+                category={cat.categoryName}
+                categoryId={cat._id}
+                fetchData={fetchData}
+              />
             </div>
             {foods
               .filter((food) => food.category._id === cat._id)

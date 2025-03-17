@@ -47,21 +47,20 @@ const ResetChangePassword = () => {
   });
 
   const handleResetSubmit = async (values: z.infer<typeof resetSchema>) => {
+    const resetForm = {
+      email: values.email,
+    };
     try {
       const response = await axios.post(
-        "http://localhost:4000/reset-password-request"
+        "http://localhost:4000/auth//reset-password-request",
+        resetForm
       );
-
       if (response) {
         setStep("change");
         return;
       }
     } catch (error) {
-      console.error("Error during password reset request:", error);
-      resetForm.setError("root", {
-        type: "manual",
-        message: "An error occurred. Please try again.",
-      });
+      console.error("Error password reset request:", error);
     }
   };
 
@@ -71,22 +70,16 @@ const ResetChangePassword = () => {
     try {
       if (values.newPassword !== values.confirmPassword) {
         changePasswordForm.setError("confirmPassword", {
-          type: "manual",
           message: "Passwords do not match",
         });
         return;
       }
       const response = await axios.post("http://localhost:4000/reset-password");
-
       if (response) {
         router.push("/auth/login");
       }
     } catch (error) {
-      console.error("Error during password change:", error);
-      changePasswordForm.setError("root", {
-        type: "manual",
-        message: "An error occurred. Please try again.",
-      });
+      console.error("Error password change:", error);
     }
   };
 
