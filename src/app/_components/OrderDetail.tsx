@@ -20,15 +20,13 @@ export function OrderSheet() {
         </div>
       </SheetTrigger>
       <SheetContent className="w-full max-w-lg bg-[#404040] border-none rounded-l-3xl flex flex-col gap-5">
-        <SheetHeader>
-          <VisuallyHidden>
-            <h2>Order details</h2>
-          </VisuallyHidden>
-          <div className="flex gap-2 text-[#fafafa] text-[20px] mt-5 font-semibold">
-            <ShoppingCart />
-            <p>Order details</p>
-          </div>
-        </SheetHeader>
+        <VisuallyHidden>
+          <SheetHeader></SheetHeader>
+        </VisuallyHidden>
+        <div className="flex gap-2 text-[#fafafa] text-[20px] mt-5 font-semibold">
+          <ShoppingCart />
+          <p>Order details</p>
+        </div>
 
         <Tabs defaultValue="cart" className="w-full mt-5">
           <TabsList className="grid w-full h-[44px] grid-cols-2 rounded-full">
@@ -81,7 +79,9 @@ export function OrderSheet() {
             </div>
           </TabsContent>
         </Tabs>
-        <SheetFooter hidden></SheetFooter>
+        <VisuallyHidden>
+          <SheetFooter></SheetFooter>
+        </VisuallyHidden>
       </SheetContent>
     </Sheet>
   );
