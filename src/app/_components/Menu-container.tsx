@@ -48,7 +48,7 @@ const MenuContainer = () => {
       {!selectedCategory ? (
         <div className="max-w-[1340px] flex flex-col m-auto ">
           {categories.map((cat) => (
-            <div>
+            <div key={cat._id}>
               <h2 className="text-2xl font-bold text-white p-5">
                 {cat.categoryName}
               </h2>
@@ -56,7 +56,7 @@ const MenuContainer = () => {
                 {foods
                   .filter((food) => food.category._id === cat._id)
                   .map((food) => (
-                    <div className="">
+                    <div key={food._id}>
                       <Card
                         key={food._id}
                         id={food._id}

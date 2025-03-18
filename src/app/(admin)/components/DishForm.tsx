@@ -12,7 +12,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Plus } from "lucide-react";
+import { ImageIcon, Plus, X } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -128,44 +128,47 @@ const AddDishDialog = ({
         <DialogHeader>
           <DialogTitle>Add new Dish to {category}</DialogTitle>
         </DialogHeader>
+        <div></div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="foodName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Food name</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="w-full"
-                      placeholder="Type food name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex justify-between">
+              <FormField
+                control={form.control}
+                name="foodName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Food name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="w-full"
+                        placeholder="Type food name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Food price</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="w-full"
-                      type="text"
-                      placeholder="Enter price..."
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Food price</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="w-full"
+                        type="text"
+                        placeholder="Enter price..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -198,13 +201,21 @@ const AddDishDialog = ({
                           alt="Uploaded"
                           width={1000}
                           height={1000}
-                          className="h-[210px] w-full object-cover rounded-2xl"
+                          className="h-[160px] w-full object-cover rounded-2xl"
                           src={imagePreview}
                         />
+                        <Button
+                          className="absolute top-1 right-1 rounded-full"
+                          size={"icon"}
+                          variant={"outline"}
+                          onClick={() => setImagePreview("")}
+                        >
+                          <X />
+                        </Button>
                       </div>
                     ) : (
                       <label htmlFor="image-upload" className="cursor-pointer">
-                        <div className="flex flex-col items-center gap-2 border-2 border-dashed border-[#2563EB33] bg-[#2564eb25] rounded-md p-4 text-center">
+                        <div className="flex flex-col items-center justify-center gap-2 border-2 mt-2 border-dashed h-[160px] border-[#2563EB33] bg-[#2564eb25] rounded-2xl p-4 text-center">
                           <div className="flex justify-center rounded-full bg-white p-2 w-10 h-10">
                             <ImageIcon />
                           </div>

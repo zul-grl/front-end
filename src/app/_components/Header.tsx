@@ -1,6 +1,18 @@
 import { ChevronRight, MapPin } from "lucide-react";
 import { OrderSheet } from "./OrderDetail";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function HeaderHome() {
   return (
@@ -21,15 +33,35 @@ export default function HeaderHome() {
           </div>
         </Link>
         <div className="flex items-center gap-6">
-          <div className="flex items-center justify-center rounded-full bg-white w-full h-[39px] px-3 py-2 gap-1">
-            <MapPin className="text-red-600" />
-            <p className="text-red-600">Food delivery</p>
-            <span className="font-extrabold text-red-600">:</span>
-            <div className="flex justify-between text-[#71717a] gap-3">
-              <p>Add location</p>
-              <ChevronRight />
-            </div>
-          </div>
+          <Dialog>
+            <DialogTrigger>
+              {" "}
+              <div className="flex items-center justify-center rounded-full bg-white w-full h-[39px] px-3 py-2 gap-1">
+                <MapPin className="text-red-600" />
+                <p className="text-red-600">Food delivery</p>
+                <span className="font-extrabold text-red-600">:</span>
+                <div className="flex justify-between text-[#71717a] gap-3">
+                  <p>Add location</p>
+                  <ChevronRight />
+                </div>
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delivery address</DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              <Textarea placeholder="Please provide specific address details such as building number, entrance, and apartment number" />
+              <DialogFooter className="justify-end">
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Cancel
+                  </Button>
+                </DialogClose>
+                <Button type="submit">Deliver here</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           <OrderSheet />
         </div>
       </div>

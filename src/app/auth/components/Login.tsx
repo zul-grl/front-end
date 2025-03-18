@@ -40,8 +40,12 @@ const Login = () => {
       password: values.email,
     };
 
-    await axios.post("http://localhost:4000/auth/sign-in", userData);
+    const response = await axios.post(
+      "http://localhost:4000/auth/sign-in",
+      userData
+    );
     console.log(values);
+    localStorage.setItem("userId", response.data.user._id);
   };
 
   return (

@@ -1,6 +1,24 @@
 "use client";
 
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { FoodCategory } from "../_util/type";
+
 const Footer = () => {
+  const [category, setCategories] = useState<FoodCategory[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get<{ categories: FoodCategory[] }>(
+          "http://localhost:4000/food-category"
+        );
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <div className="bg-primary pt-12 w-full">
       <div className="h-[92px] bg-[#EF4444] whitespace-nowrap flex overflow-hidden justify-center items-center w-full">
@@ -36,20 +54,14 @@ const Footer = () => {
           <div className="text-secondary">
             <p className="text-[#71717A] font-medium mb-2">MENU</p>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-              <p className="hover:text-[#EF4444] cursor-pointer">Appetizers</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">Side dish</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">Salads</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">Brunch</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">Pizzas</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">Desserts</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">
-                Lunch favorites
-              </p>
-              <p className="hover:text-[#EF4444] cursor-pointer">Beverages</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">Main dishes</p>
-              <p className="hover:text-[#EF4444] cursor-pointer">
-                Fish & Sea foods
-              </p>
+              {category.map((cat) => (
+                <p
+                  key={cat._id}
+                  className="hover:text-[#EF4444] cursor-pointer"
+                >
+                  {cat.categoryName}
+                </p>
+              ))}
             </div>
           </div>
 

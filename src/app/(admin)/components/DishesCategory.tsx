@@ -135,41 +135,47 @@ const DishesCategory = ({
               All dishes
             </ToggleGroupItem>
             {categories.map((category: FoodCategory, index: number) => (
-              <ToggleGroupItem
-                key={index}
-                className="bg-white text-black rounded-full border data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-white"
-                value={category?._id}
-              >
-                {category?.categoryName}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 p-0 ml-2"
-                    >
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setEditCategoryId(category?._id);
-                        setEditCategoryName(category?.categoryName);
-                      }}
-                    >
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => setDeleteCategoryId(category?._id)}
-                    >
-                      <Trash className="mr-2 h-4 w-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </ToggleGroupItem>
+              <div key={index} className="relative">
+                <ToggleGroupItem
+                  className="bg-white text-black rounded-full py-3 px-7 border data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-white"
+                  value={category?._id}
+                >
+                  {category?.categoryName}
+                </ToggleGroupItem>
+                <div className="absolute right-[2px] top-[6px]">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 p-0 ml-2"
+                        asChild
+                      >
+                        <div>
+                          <MoreVertical className="h-4 w-4" />
+                        </div>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setEditCategoryId(category?._id);
+                          setEditCategoryName(category?.categoryName);
+                        }}
+                      >
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setDeleteCategoryId(category?._id)}
+                      >
+                        <Trash className="mr-2 h-4 w-4" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
             ))}
           </ToggleGroup>
           <AlertDialog>
