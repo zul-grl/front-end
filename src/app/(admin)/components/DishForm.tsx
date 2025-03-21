@@ -194,7 +194,7 @@ const AddDishDialog = ({
             <FormField
               control={form.control}
               name="image"
-              render={({}) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>Image</FormLabel>
                   <FormControl>

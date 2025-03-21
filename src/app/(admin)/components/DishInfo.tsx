@@ -208,9 +208,7 @@ const DishInfo = ({
                     <FormControl className="w-[280px]">
                       <Select
                         value={field.value}
-                        onValueChange={(value) =>
-                          form.setValue("category", value)
-                        }
+                        onValueChange={field.onChange}
                       >
                         <SelectTrigger className="w-[280px]">
                           <SelectValue placeholder="Select a category" />
@@ -276,7 +274,7 @@ const DishInfo = ({
             <FormField
               control={form.control}
               name="image"
-              render={({}) => (
+              render={() => (
                 <FormItem>
                   <div className="flex justify-between">
                     <FormLabel className="text-[#71717A] text-xs">
