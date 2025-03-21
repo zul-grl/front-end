@@ -1,42 +1,25 @@
 "use client";
 
-import { FoodCategory, FoodItem } from "@/app/_util/type";
-import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Card from "./Card";
+import { useCategory } from "../_context/CategoryContext";
+import { useFood } from "../_context/FoodContext";
 
 const MenuContainer = () => {
-  const [foods, setFoods] = useState<FoodItem[]>([]);
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
-
-  const [categories, setCategories] = useState<FoodCategory[]>([]);
+  const { categories, fetchCategories } = useCategory();
+  const { foods, fetchFoodData } = useFood();
+  const fetchData = async () => {
+    try {
+      fetchCategories();
+      fetchFoodData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<{ allFood: FoodItem[] }>(
-          "http://localhost:4000/food"
-        );
-        setFoods(response.data.allFood);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<{ categories: FoodCategory[] }>(
-          "http://localhost:4000/food-category"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchData();
   }, []);
   const filteredFoods =

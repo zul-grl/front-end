@@ -1,23 +1,12 @@
 "use client";
-
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { FoodCategory } from "../_util/type";
+import { useEffect } from "react";
+import { useCategory } from "../_context/CategoryContext";
+import Image from "next/image";
 
 const Footer = () => {
-  const [category, setCategories] = useState<FoodCategory[]>([]);
+  const { categories, fetchCategories } = useCategory();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<{ categories: FoodCategory[] }>(
-          "http://localhost:4000/food-category"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    fetchCategories();
   }, []);
   return (
     <div className="bg-primary pt-12 w-full">
@@ -34,7 +23,13 @@ const Footer = () => {
       <div className="px-4 md:px-8 lg:px-16 xl:px-[220px] py-12 md:py-[88px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div className="flex flex-col items-center sm:items-start">
-            <img className="w-[46px]" src="/logo.png" alt="NomNom Logo" />
+            <Image
+              className="w-[46px]"
+              src="/logo.png"
+              width={100}
+              height={100}
+              alt="NomNom Logo"
+            />
             <div className="mt-2 text-center sm:text-left">
               <div className="flex justify-center sm:justify-start">
                 <h4 className="font-semibold text-secondary">Nom</h4>
@@ -54,7 +49,7 @@ const Footer = () => {
           <div className="text-secondary">
             <p className="text-[#71717A] font-medium mb-2">MENU</p>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-              {category.map((cat) => (
+              {categories.map((cat) => (
                 <p
                   key={cat._id}
                   className="hover:text-[#EF4444] cursor-pointer"
@@ -68,15 +63,19 @@ const Footer = () => {
           <div>
             <p className="text-[#71717A] font-medium mb-4">FOLLOW US</p>
             <div className="flex gap-4">
-              <img
+              <Image
                 className="w-[28px] cursor-pointer hover:opacity-80 transition-opacity"
                 src="/face.png"
+                width={100}
+                height={100}
                 alt="Facebook"
               />
-              <img
+              <Image
                 className="w-[28px] cursor-pointer hover:opacity-80 transition-opacity"
                 src="/instagram.png"
                 alt="Instagram"
+                width={100}
+                height={100}
               />
             </div>
           </div>

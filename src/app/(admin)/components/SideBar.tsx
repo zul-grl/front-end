@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Settings, Truck } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const SideBar = () => {
@@ -7,10 +8,12 @@ const SideBar = () => {
     <div className="sticky top-0 w-[205px] h-screen flex flex-col gap-10 p-7 items-center bg-white">
       <Link href={"/"}>
         <div className="flex gap-2">
-          <img
+          <Image
             className="w-[36px] h-[29px] object-cover"
             src="/logo.png"
             alt=""
+            width={100}
+            height={100}
           />
           <div>
             <div className="flex">

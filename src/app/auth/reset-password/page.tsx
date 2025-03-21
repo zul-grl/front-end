@@ -1,5 +1,4 @@
-
-import ResetChangePassword from "../components/ResetChangePass";
+import ResetChangePassword from "../components/ResetPassword";
 
 const ResetPasswordPage = () => {
   return <ResetChangePassword />;

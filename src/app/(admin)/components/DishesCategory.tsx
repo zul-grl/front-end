@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,103 +16,103 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, X, MoreVertical, Edit, Trash } from "lucide-react";
+import { Plus, X, Edit, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { FoodCategory } from "@/app/_util/type";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useCategory } from "@/app/_context/CategoryContext";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+
+type CategoryFormData = {
+  categoryName: string;
+};
 
 const DishesCategory = ({
   setSelectedCategory,
+  foodCounts,
 }: {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  foodCounts: { [key: string]: number };
 }) => {
-  const [categories, setCategories] = useState<FoodCategory[]>([]);
-  const [newCategoryName, setNewCategoryName] = useState<string>("");
-  const [editCategoryId, setEditCategoryId] = useState<string | null>(null);
-  const [editCategoryName, setEditCategoryName] = useState<string>("");
-  const [deleteCategoryId, setDeleteCategoryId] = useState<string | null>(null);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get<{ categories: FoodCategory[] }>(
-        "http://localhost:4000/food-category"
-      );
-      setCategories(response.data.categories);
-    } catch (error) {
-      console.error(error);
+  const [dialogState, setDialogState] = useState<{
+    type: "add" | "edit" | "delete" | null;
+    categoryId: string | null;
+  }>({ type: null, categoryId: null });
+  const { register, handleSubmit, reset, setValue } = useForm<CategoryFormData>(
+    {
+      defaultValues: {
+        categoryName: "",
+      },
     }
-  };
+  );
 
+  const { categories, fetchCategories } = useCategory();
   useEffect(() => {
-    fetchData();
+    fetchCategories();
   }, []);
 
-  const handleAddCategory = async () => {
+  useEffect(() => {
+    if (dialogState.type === "edit" && dialogState.categoryId) {
+      const category = categories.find(
+        (cat) => cat._id === dialogState.categoryId
+      );
+      if (category) {
+        setValue("categoryName", category.categoryName);
+      }
+    } else {
+      reset({ categoryName: "" });
+    }
+  }, [dialogState, categories, setValue, reset]);
+
+  const onSubmit = async (data: CategoryFormData) => {
     try {
-      if (!newCategoryName.trim()) {
+      if (!data.categoryName.trim()) {
         alert("Category name cannot be empty");
         return;
       }
-      const response = await axios.post<{ category: FoodCategory }>(
-        "http://localhost:4000/food-category",
-        {
-          categoryName: newCategoryName,
-        }
-      );
-      setCategories([...categories, response.data.category]);
-      setNewCategoryName("");
-      fetchData();
-    } catch (error) {
-      console.error("Error adding category:", error);
-    }
-  };
 
-  const handleEditCategory = async () => {
-    try {
-      if (!editCategoryId || !editCategoryName.trim()) {
-        alert("Category name cannot be empty");
-        return;
+      if (dialogState.type === "add") {
+        await axios.post<{ category: FoodCategory }>(
+          "https://food-delivery-back-end-0cz4.onrender.com/food-category",
+          { categoryName: data.categoryName }
+        );
+      } else if (dialogState.type === "edit" && dialogState.categoryId) {
+        await axios.patch<{ category: FoodCategory }>(
+          `https://food-delivery-back-end-0cz4.onrender.com/food-category/${dialogState.categoryId}`,
+          { categoryName: data.categoryName }
+        );
       }
-      const response = await axios.patch<{ category: FoodCategory }>(
-        `http://localhost:4000/food-category/${editCategoryId}`,
-        {
-          categoryName: editCategoryName,
-        }
-      );
-      setCategories(
-        categories.map((cat) =>
-          cat._id === editCategoryId ? response.data.category : cat
-        )
-      );
-      fetchData();
-      setEditCategoryId(null);
-      setEditCategoryName("");
+      fetchCategories();
+      closeDialog();
     } catch (error) {
-      console.error("Error editing category:", error);
+      console.error("Error saving category:", error);
     }
   };
 
-  const handleDeleteCategory = async () => {
+  const handleDelete = async () => {
     try {
-      if (!deleteCategoryId) return;
+      if (!dialogState.categoryId) return;
+
       await axios.delete(
-        `http://localhost:4000/food-category/${deleteCategoryId}`
+        `https://food-delivery-back-end-0cz4.onrender.com/food-category/${dialogState.categoryId}`
       );
-      setCategories(categories.filter((cat) => cat._id !== deleteCategoryId));
-      setDeleteCategoryId(null);
-      fetchData();
+
+      await fetchCategories();
+      closeDialog();
     } catch (error) {
       console.error("Error deleting category:", error);
     }
+  };
+
+  const closeDialog = () => {
+    setDialogState({ type: null, categoryId: null });
+    reset();
   };
 
   return (
@@ -136,45 +140,43 @@ const DishesCategory = ({
             </ToggleGroupItem>
             {categories.map((category: FoodCategory, index: number) => (
               <div key={index} className="relative">
-                <ToggleGroupItem
-                  className="bg-white text-black rounded-full py-3 px-7 border data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-white"
-                  value={category?._id}
-                >
-                  {category?.categoryName}
-                </ToggleGroupItem>
-                <div className="absolute right-[2px] top-[6px]">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 p-0 ml-2"
-                        asChild
-                      >
-                        <div>
-                          <MoreVertical className="h-4 w-4" />
-                        </div>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setEditCategoryId(category?._id);
-                          setEditCategoryName(category?.categoryName);
-                        }}
-                      >
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setDeleteCategoryId(category?._id)}
-                      >
-                        <Trash className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                <ContextMenu>
+                  <ContextMenuTrigger asChild>
+                    <ToggleGroupItem
+                      className="bg-white text-black rounded-full py-3 px-3 border data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-white"
+                      value={category?._id}
+                    >
+                      {category?.categoryName}{" "}
+                      <span className="bg-black text-white rounded-full px-3 py-1 ml-2 text-xs">
+                        {foodCounts[category._id] || 0}
+                      </span>
+                    </ToggleGroupItem>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuItem
+                      onClick={() =>
+                        setDialogState({
+                          type: "edit",
+                          categoryId: category?._id,
+                        })
+                      }
+                    >
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      onClick={() =>
+                        setDialogState({
+                          type: "delete",
+                          categoryId: category?._id,
+                        })
+                      }
+                    >
+                      <Trash className="mr-2 h-4 w-4" />
+                      Delete
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
               </div>
             ))}
           </ToggleGroup>
@@ -184,6 +186,9 @@ const DishesCategory = ({
                 className="rounded-full hover:bg-red-600 bg-red-600"
                 variant="default"
                 size="icon"
+                onClick={() =>
+                  setDialogState({ type: "add", categoryId: null })
+                }
               >
                 <Plus />
               </Button>
@@ -197,29 +202,25 @@ const DishesCategory = ({
                   </AlertDialogCancel>
                 </div>
               </AlertDialogHeader>
-              <Input
-                type="text"
-                placeholder="Category Name"
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-              />
-
-              <AlertDialogFooter>
-                <AlertDialogAction onClick={handleAddCategory}>
-                  Add
-                </AlertDialogAction>
-              </AlertDialogFooter>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Input
+                  type="text"
+                  placeholder="Category Name"
+                  {...register("categoryName")}
+                />
+                <AlertDialogFooter className="mt-4">
+                  <AlertDialogAction type="submit">Add</AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
             </AlertDialogContent>
           </AlertDialog>
         </div>
       </div>
+
       <AlertDialog
-        open={!!editCategoryId}
+        open={dialogState.type === "edit"}
         onOpenChange={(open) => {
-          if (!open) {
-            setEditCategoryId(null);
-            setEditCategoryName("");
-          }
+          if (!open) closeDialog();
         }}
       >
         <AlertDialogContent>
@@ -231,26 +232,23 @@ const DishesCategory = ({
               </AlertDialogCancel>
             </div>
           </AlertDialogHeader>
-          <Input
-            type="text"
-            placeholder="Category Name"
-            value={editCategoryName}
-            onChange={(e) => setEditCategoryName(e.target.value)}
-          />
-
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={handleEditCategory}>
-              Save
-            </AlertDialogAction>
-          </AlertDialogFooter>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              type="text"
+              placeholder="Category Name"
+              {...register("categoryName")}
+            />
+            <AlertDialogFooter className="mt-4">
+              <AlertDialogAction type="submit">Save</AlertDialogAction>
+            </AlertDialogFooter>
+          </form>
         </AlertDialogContent>
       </AlertDialog>
+
       <AlertDialog
-        open={!!deleteCategoryId}
+        open={dialogState.type === "delete"}
         onOpenChange={(open) => {
-          if (!open) {
-            setDeleteCategoryId(null);
-          }
+          if (!open) closeDialog();
         }}
       >
         <AlertDialogContent>
@@ -262,10 +260,8 @@ const DishesCategory = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteCategory}>
-              Delete
-            </AlertDialogAction>
+            <AlertDialogCancel onClick={closeDialog}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

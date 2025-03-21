@@ -1,26 +1,18 @@
 "use client";
 import { FoodCategory } from "@/app/_util/type";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useCategory } from "../_context/CategoryContext";
 
 const Categories = () => {
-  const [categories, setCategories] = useState<FoodCategory[]>([]);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedCategory = searchParams.get("category");
+  const { categories, fetchCategories } = useCategory();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<{ categories: FoodCategory[] }>(
-          "http://localhost:4000/food-category"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    fetchCategories();
   }, []);
 
   const handleCategoryClick = (categoryId: string) => {
@@ -28,8 +20,12 @@ const Categories = () => {
   };
 
   return (
-    <ToggleGroup type="single" className="flex flex-wrap mt-3 gap-2">
-      {categories.map((category: FoodCategory) => (
+    <ToggleGroup
+      type="single"
+      className="flex flex-wrap mt-3 gap-2"
+      value={selectedCategory || ""}
+    >
+      {categories?.map((category: FoodCategory) => (
         <ToggleGroupItem
           key={category._id}
           className="bg-white text-black rounded-full data-[state=on]:bg-red-500 px-6 py-3 data-[state=on]:text-white"

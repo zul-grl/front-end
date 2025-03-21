@@ -37,7 +37,7 @@ const formSchema = z.object({
 interface AddDishDialogProps {
   category: string;
   categoryId: string;
-  fetchData: () => {};
+  fetchData: () => void;
 }
 
 const AddDishDialog = ({
@@ -95,7 +95,10 @@ const AddDishDialog = ({
         image: imageUrl,
       };
 
-      await axios.post("http://localhost:4000/food", formData);
+      await axios.post(
+        "https://food-delivery-back-end-0cz4.onrender.com/food",
+        formData
+      );
       fetchData();
       form.reset();
       setImagePreview(null);

@@ -16,6 +16,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,7 +25,6 @@ const formSchema = z.object({
 
 const Login = () => {
   const router = useRouter();
-  const onNext = () => router.push("/");
   const onBack = () => router.push("/auth/signup");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,17 +35,19 @@ const Login = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const userData = {
-      email: values.email,
-      password: values.email,
-    };
-
-    const response = await axios.post(
-      "http://localhost:4000/auth/sign-in",
-      userData
-    );
-    console.log(values);
-    localStorage.setItem("userId", response.data.user._id);
+    try {
+      const response = await axios.post(
+        "https://food-delivery-back-end-0cz4.onrender.com/auth/sign-in",
+        values
+      );
+      if (response) {
+        router.push("/");
+        localStorage.setItem("userId", response.data.user._id);
+      }
+    } catch (error) {
+      toast("Invalid user.");
+      console.log(error);
+    }
   };
 
   return (
@@ -110,17 +112,16 @@ const Login = () => {
           </div>
 
           <Button
-            onClick={form.handleSubmit(onNext)}
             type="submit"
             className="w-full py-3 mt-4 focus:outline-none focus:ring-0"
           >
-            Let's Go
+            Let&#39;s Go
           </Button>
         </form>
       </Form>
 
       <div className="flex gap-2 justify-center">
-        <p className="text-zinc-500 text-sm">Don't have an account?</p>
+        <p className="text-zinc-500 text-sm">Don&#39;t have an account?</p>
         <Link href="/auth/signup">
           <p className="text-blue-600 hover:underline text-sm">Sign up</p>
         </Link>

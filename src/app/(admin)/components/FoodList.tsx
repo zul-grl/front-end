@@ -1,40 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import axios from "axios";
-import { FoodCategory, FoodItem } from "@/app/_util/type";
+import { useEffect } from "react";
 import AddDishDialog from "./DishForm";
 import DishInfo from "./DishInfo";
 import Image from "next/image";
+import { useCategory } from "@/app/_context/CategoryContext";
+import { useFood } from "@/app/_context/FoodContext";
 
-const FoodList = ({
-  selectedCategory,
-}: {
+interface FoodListProps {
   selectedCategory: string | null;
-}) => {
-  const [categories, setCategories] = useState<FoodCategory[]>([]);
-  const [foods, setFoods] = useState<FoodItem[]>([]);
+  setFoodCounts: (counts: { [key: string]: number }) => void;
+}
+
+const FoodList = ({ selectedCategory, setFoodCounts }: FoodListProps) => {
+  const { categories, fetchCategories } = useCategory();
+  const { foods, fetchFoodData, setFoods } = useFood();
+
   const fetchData = async () => {
     try {
-      const categoriesResponse = await axios.get<{
-        categories: FoodCategory[];
-      }>("http://localhost:4000/food-category");
-      setCategories(categoriesResponse.data.categories);
-      const foodsResponse = await axios.get<{
-        message: string;
-        allFood: FoodItem[];
-      }>("http://localhost:4000/food");
-      console.log("Foods Response:", foodsResponse.data);
-      setFoods(foodsResponse.data.allFood);
+      fetchCategories();
+      fetchFoodData();
     } catch (error) {
       console.error(error);
       setFoods([]);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const counts: { [key: string]: number } = {};
+    categories.forEach((cat) => {
+      counts[cat._id] = foods.filter(
+        (food) => food.category._id === cat._id
+      ).length;
+    });
+    setFoodCounts(counts);
+  }, [categories, foods, setFoodCounts]);
+
   const displayedCategories =
     selectedCategory === "all" || !selectedCategory
       ? categories
@@ -44,7 +49,10 @@ const FoodList = ({
     <div className="p-4 flex flex-col gap-3 rounded-xl bg-white ">
       {displayedCategories.map((cat) => (
         <div key={cat._id} className="space-y-4">
-          <h4 className="text-xl font-bold">{cat.categoryName}</h4>
+          <h4 className="text-xl font-bold">
+            {cat.categoryName}(
+            {foods.filter((food) => food.category._id === cat._id).length})
+          </h4>
           <div className="flex flex-wrap gap-4">
             <div className="w-[260px] h-[240px]">
               <AddDishDialog

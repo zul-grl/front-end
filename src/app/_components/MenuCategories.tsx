@@ -1,10 +1,11 @@
 "use client";
+import Image from "next/image";
 import Categories from "./Categories";
 
 const MenuCategories = () => {
   return (
     <div className="w-full flex flex-col">
-      <img
+      <Image
         src="https://res.cloudinary.com/dzb3xzqxv/image/upload/v1739866281/steak_qtjrpd.png"
         alt=""
         width={1000}

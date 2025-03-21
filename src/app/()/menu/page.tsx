@@ -1,12 +1,14 @@
 import Categories from "@/app/_components/Categories";
 import MenuContainer from "@/app/_components/Menu-container";
-
+import { Suspense } from "react";
 
 const MenuPage = () => {
   return (
     <div>
-      <Categories />
-      <MenuContainer />
+      <Suspense>
+        <Categories />
+        <MenuContainer />
+      </Suspense>
     </div>
   );
 };

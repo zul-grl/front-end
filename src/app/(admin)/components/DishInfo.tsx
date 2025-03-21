@@ -14,7 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { FoodCategory, FoodItem } from "@/app/_util/type";
+import { FoodItem } from "@/app/_util/type";
 import {
   Dialog,
   DialogTrigger,
@@ -44,6 +44,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCategory } from "@/app/_context/CategoryContext";
 
 const formSchema = z.object({
   foodName: z.string().min(1, "Dish name is required"),
@@ -58,40 +59,19 @@ const DishInfo = ({
   fetchData,
 }: {
   food: FoodItem;
-  fetchData: () => {};
+  fetchData: () => void;
 }) => {
-  const [categories, setCategories] = useState<FoodCategory[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const PRESET_NAME = "food-delivary-app";
   const CLOUDINARY_NAME = "dzb3xzqxv";
-  const fetchCategoryData = async () => {
-    try {
-      const categoriesResponse = await axios.get<{
-        categories: FoodCategory[];
-      }>("http://localhost:4000/food-category");
-      setCategories(categoriesResponse.data.categories);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    fetchCategoryData();
-  }, []);
+  const { categories, fetchCategories } = useCategory();
 
   useEffect(() => {
-    if (food) {
-      form.setValue("foodName", food.foodName);
-      form.setValue("ingredients", food.ingredients);
-      form.setValue("price", food.price.toString());
-      form.setValue("category", food.category._id);
-      if (food.image) {
-        setImagePreview(food.image);
-      }
-    }
-  }, [food]);
+    fetchCategories();
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -103,6 +83,18 @@ const DishInfo = ({
       image: food?.image || "",
     },
   });
+
+  useEffect(() => {
+    if (food) {
+      form.setValue("foodName", food.foodName);
+      form.setValue("ingredients", food.ingredients);
+      form.setValue("price", food.price.toString());
+      form.setValue("category", food.category._id);
+      if (food.image) {
+        setImagePreview(food.image);
+      }
+    }
+  }, [food, form]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -145,7 +137,10 @@ const DishInfo = ({
         ingredients: values.ingredients,
         image: imageUrl,
       };
-      await axios.patch(`http://localhost:4000/food/${food._id}`, dishData);
+      await axios.patch(
+        `https://food-delivery-back-end-0cz4.onrender.com/food/${food._id}`,
+        dishData
+      );
       form.reset();
       fetchData();
     } catch (error) {
@@ -156,7 +151,9 @@ const DishInfo = ({
 
   const handleDeleteFood = async () => {
     try {
-      await axios.delete(`http://localhost:4000/food/${food._id}`);
+      await axios.delete(
+        `https://food-delivery-back-end-0cz4.onrender.com/food/${food._id}`
+      );
       setOpen(false);
       fetchData();
     } catch (error) {
@@ -202,7 +199,7 @@ const DishInfo = ({
             <FormField
               control={form.control}
               name="category"
-              render={({ field: { onChange, value, ...rest } }) => (
+              render={({ field }) => (
                 <FormItem>
                   <div className="flex justify-between">
                     <FormLabel className="text-[#71717A] text-xs">
@@ -210,8 +207,7 @@ const DishInfo = ({
                     </FormLabel>
                     <FormControl className="w-[280px]">
                       <Select
-                        value={value}
-                        {...rest}
+                        value={field.value}
                         onValueChange={(value) =>
                           form.setValue("category", value)
                         }
@@ -280,7 +276,7 @@ const DishInfo = ({
             <FormField
               control={form.control}
               name="image"
-              render={({ field: { onChange, value, ...rest } }) => (
+              render={({}) => (
                 <FormItem>
                   <div className="flex justify-between">
                     <FormLabel className="text-[#71717A] text-xs">
@@ -314,7 +310,6 @@ const DishInfo = ({
                             onChange={handleFileChange}
                             className="hidden"
                             id="image-upload"
-                            {...rest}
                           />
                           <label
                             htmlFor="image-upload"

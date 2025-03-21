@@ -51,12 +51,13 @@ const SignUpPage = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:4000/auth/sign-up",
+        "https://food-delivery-back-end-0cz4.onrender.com/auth/sign-up",
         userData
       );
 
       if (response) {
         router.push("/auth/login");
+        localStorage.setItem("userId", response.data.userId);
       }
     } catch (error) {
       console.error("Error during signup:", error);
@@ -124,7 +125,7 @@ const SignUpPage = () => {
             )}
           />
           <Button onClick={onNext} type="submit">
-            Let's Go
+            Let&#39;s Go
           </Button>
         </form>
       </Form>
