@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/table";
 import { useOrder } from "@/app/_context/OrderContext";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
@@ -57,13 +56,11 @@ export function OrderInfo() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [dateFilter, setDateFilter] = React.useState<Date | undefined>(
-    undefined
-  );
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [selectedStatus, setSelectedStatus] = React.useState<
     "pending" | "delivered" | "cancelled"
   >("pending");
+  const [dateFilter, setDateFilter] = React.useState<Date | null>(null);
 
   React.useEffect(() => {
     fetchAllOrderData();
@@ -107,7 +104,6 @@ export function OrderInfo() {
       header: "Food",
       cell: ({ row }) => {
         const items = row.getValue("foodOrderItems") as foodOrderItemsType[];
-      
 
         return (
           <DropdownMenu>
@@ -229,14 +225,26 @@ export function OrderInfo() {
               <Button variant="outline">
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {dateFilter
-                  ? format(dateFilter, "yyyy-MM-dd")
+                  ? format(new Date(dateFilter), "yyyy-MM-dd")
                   : "Filter by date"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-             
+            <PopoverContent className="w-auto p-2">
+              <input
+                type="date"
+                className="border rounded px-2 py-1"
+                value={
+                  dateFilter ? format(new Date(dateFilter), "yyyy-MM-dd") : ""
+                }
+                onChange={(e) =>
+                  setDateFilter(
+                    e.target.value ? new Date(e.target.value) : null
+                  )
+                }
+              />
             </PopoverContent>
           </Popover>
+
           <Button
             onClick={() => setIsDialogOpen(true)}
             disabled={table.getSelectedRowModel().rows.length === 0}
