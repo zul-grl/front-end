@@ -234,17 +234,7 @@ export function OrderInfo() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={dateFilter}
-                onSelect={(date) => {
-                  setDateFilter(date);
-                  table
-                    .getColumn("date")
-                    ?.setFilterValue(date ? format(date, "yyyy-MM-dd") : "");
-                }}
-                initialFocus
-              />
+             
             </PopoverContent>
           </Popover>
           <Button
