@@ -1,9 +1,13 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Settings, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const SideBar = () => {
+  const pathname = usePathname();
+
   return (
     <div className="sticky top-0 w-[205px] h-screen flex flex-col gap-10 p-7 items-center bg-white">
       <Link href={"/"}>
@@ -24,21 +28,43 @@ const SideBar = () => {
         </div>
       </Link>
       <Link href={"/food-menu"}>
-        <Button className="rounded-full">
+        <Button
+          variant={"outline"}
+          className={`rounded-full w-[155px]  ${
+            pathname === "/food-menu"
+              ? "bg-black text-white hover:bg-black hover:text-white"
+              : "bg-white text-black"
+          }`}
+        >
           <LayoutDashboard /> Food menu
         </Button>
       </Link>
       <Link href={"/orders"}>
-        <Button className="rounded-full">
+        <Button
+          variant={"outline"}
+          className={`rounded-full w-[155px] ${
+            pathname === "/orders"
+              ? "bg-black text-white hover:bg-black hover:text-white"
+              : "bg-white text-black"
+          }`}
+        >
           <Truck /> Orders
         </Button>
       </Link>
       <Link href={"/settings"}>
-        <Button className="rounded-full">
+        <Button
+          variant={"outline"}
+          className={`rounded-full w-[155px]  ${
+            pathname === "/settings"
+              ? "bg-black text-white hover:bg-black hover:text-white"
+              : "bg-white text-black"
+          }`}
+        >
           <Settings /> Settings
         </Button>
       </Link>
     </div>
   );
 };
+
 export default SideBar;

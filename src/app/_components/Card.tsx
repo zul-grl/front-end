@@ -75,13 +75,13 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
           setIsDialogOpen(open);
         }}
       >
-        <div className="p-4 rounded-3xl flex flex-col gap-2 bg-[#FFFFFF] w-full sm:w-[397px] h-[342px] cursor-pointer">
+        <div className="p-4 rounded-3xl flex flex-col gap-2 bg-[#FFFFFF] w-full h-auto cursor-pointer">
           <div className="relative">
             <Image
               alt={name}
               width={1000}
               height={1000}
-              className="h-[210px] w-full object-cover rounded-2xl"
+              className="h-[150px] sm:h-[180px] md:h-[210px] w-full object-cover rounded-2xl"
               src={image}
             />
             <DialogTrigger
@@ -94,25 +94,29 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
 
           <div>
             <div className="flex justify-between">
-              <h3 className="text-red-500 font-semibold text-2xl">{name}</h3>
-              <h3 className="text-black font-semibold text-xl">${price}</h3>
+              <h3 className="text-red-500 font-semibold text-lg sm:text-xl md:text-2xl">
+                {name}
+              </h3>
+              <h3 className="text-black font-semibold text-lg sm:text-xl">
+                ${price}
+              </h3>
             </div>
-            <p>{ingredients}</p>
+            <p className="text-sm sm:text-base">{ingredients}</p>
           </div>
         </div>
 
-        <DialogContent className="rounded-3xl w-full sm:w-[550px] h-[320px]">
+        <DialogContent className="rounded-3xl w-[95%] sm:w-[550px] h-auto min-h-[320px]">
           <VisuallyHidden>
             <DialogHeader>
               <DialogTitle>Order Details</DialogTitle>
             </DialogHeader>
           </VisuallyHidden>
-          <div className="flex gap-3 h-[270px]">
+          <div className="flex flex-col sm:flex-row gap-3 h-auto sm:h-[270px]">
             <Image
               alt={`${name} detailed image`}
               width={1000}
               height={1000}
-              className="h-[100%] w-[255px] object-cover rounded-xl"
+              className="h-[200px] sm:h-full w-full sm:w-[255px] object-cover rounded-xl"
               src={image}
             />
             <div className="relative w-full">
@@ -121,7 +125,7 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
                   <h3 className="text-red-500 font-semibold text-xl">{name}</h3>
                   <p className="text-sm">{ingredients}</p>
                 </div>
-                <div className="mt-4 flex gap-4 justify-between">
+                <div className="mt-4 flex flex-col sm:flex-row gap-4 justify-between">
                   <div className="mb-4">
                     <p className="text-xs">Total price</p>
                     <h3 className="text-black font-semibold text-xl">
@@ -148,7 +152,7 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
                     </Button>
                   </div>
                 </div>
-                <DialogFooter>
+                <DialogFooter className="flex justify-end mt-2 sm:mt-0">
                   <Button type="button" onClick={handleAddToCart}>
                     Add to cart
                   </Button>
@@ -159,9 +163,9 @@ const Card = ({ id, image, name, ingredients, price }: CardProps) => {
         </DialogContent>
       </Dialog>
       <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
-        <AlertDialogContent className="bg-white backdrop-opacity-20 gap-6 rounded-2xl p-6">
+        <AlertDialogContent className="bg-white backdrop-opacity-20 gap-6 rounded-2xl p-4 sm:p-6 w-[95%] max-w-sm">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl font-bold text-center">
+            <AlertDialogTitle className="text-xl sm:text-2xl font-bold text-center">
               Please select your delivery address!
             </AlertDialogTitle>
           </AlertDialogHeader>

@@ -9,7 +9,7 @@ const AdminPage = () => {
   const [foodCounts, setFoodCounts] = useState<{ [key: string]: number }>({});
 
   return (
-    <div className="flex flex-col gap-3 p-10 bg-secondary w-full">
+    <div className="flex flex-col gap-3 p-10  w-full">
       <DishesCategory setSelectedCategory={setSelectedCategory} foodCounts={foodCounts} />
       <FoodList selectedCategory={selectedCategory} setFoodCounts={setFoodCounts} />
     </div>

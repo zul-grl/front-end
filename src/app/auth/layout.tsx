@@ -7,18 +7,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="p-10 flex gap-20 justify-center w-full h-full">
-      <div className="py-12 flex items-center">{children}</div>
-      <Toaster />
-      <div className="max-w-[1000px] h-[1050px] overflow-hidden rounded-md">
+    <div className="flex flex-col lg:flex-row w-full min-h-screen">
+      <div className="w-full lg:w-1/2 flex justify-center items-center p-4 md:p-8 lg:p-12">
+        <div className="w-full max-w-md">{children}</div>
+      </div>
+      <div className="hidden lg:flex w-full lg:w-1/2 h-screen relative bg-gray-100">
         <Image
           src="https://res.cloudinary.com/dzb3xzqxv/image/upload/v1739866324/delivary_grpogl.jpg"
-          alt=""
-          className="w-[100%] h-[100%] object-cover"
-          width={1000}
-          height={1000}
+          alt="Food delivery service"
+          className="object-cover rounded-l-lg"
+          fill
+          priority
+          sizes="(max-width: 768px) 0vw, 50vw"
         />
       </div>
+      <Toaster />
     </div>
   );
 }

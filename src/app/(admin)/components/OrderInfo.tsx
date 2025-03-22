@@ -45,7 +45,6 @@ import {
 } from "@/components/ui/dialog";
 import { FoodOrderType, UserType, foodOrderItemsType } from "@/app/_util/type";
 import Image from "next/image";
-
 export function OrderInfo() {
   const { allOrders, fetchAllOrderData, loading, handleStatusChange } =
     useOrder();
@@ -216,7 +215,7 @@ export function OrderInfo() {
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full bg-white rounded-xl p-4">
       <div className="flex items-center justify-between py-4">
         <h2 className="text-xl font-semibold">Orders</h2>
         <div className="flex items-center gap-2">
@@ -295,6 +294,32 @@ export function OrderInfo() {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="flex items-center justify-between py-4">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm">
+            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
+          </span>
+        </div>
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>

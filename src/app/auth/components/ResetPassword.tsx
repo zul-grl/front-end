@@ -22,28 +22,24 @@ const resetSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-const ResetChangePassword = () => {
+const ResetPassword = () => {
   const router = useRouter();
 
-  const resetForm = useForm<z.infer<typeof resetSchema>>({
+  const form = useForm<z.infer<typeof resetSchema>>({
     resolver: zodResolver(resetSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  const handleResetSubmit = async (values: z.infer<typeof resetSchema>) => {
-    const resetForm = {
-      email: values.email,
-    };
+  const handleSubmit = async (values: z.infer<typeof resetSchema>) => {
     try {
       const response = await axios.post(
         "https://food-delivery-back-end-0cz4.onrender.com/auth/reset-password-request",
-        resetForm
+        { email: values.email }
       );
       if (response) {
         router.push("/auth/change-password");
-        return;
       }
     } catch (error) {
       toast("Invalid user.");
@@ -52,22 +48,19 @@ const ResetChangePassword = () => {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6 w-full max-w-md">
       <Link href="/auth/login">
         <Button variant="outline" size="icon">
           <ChevronLeft />
         </Button>
       </Link>
-      <h3 className="font-semibold text-[24px]">Reset Password</h3>
+      <h3 className="text-2xl font-semibold">Reset Password</h3>
       <p className="text-[#71717A]">Enter your email to reset your password.</p>
 
-      <Form {...resetForm}>
-        <form
-          className="space-y-8"
-          onSubmit={resetForm.handleSubmit(handleResetSubmit)}
-        >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <FormField
-            control={resetForm.control}
+            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
@@ -83,11 +76,13 @@ const ResetChangePassword = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Let&#39;s Go</Button>
+          <Button type="submit" className="w-full">
+            Let&#39;s Go
+          </Button>
         </form>
       </Form>
     </div>
   );
 };
 
-export default ResetChangePassword;
+export default ResetPassword;

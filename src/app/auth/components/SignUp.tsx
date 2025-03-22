@@ -23,7 +23,7 @@ const formSchema = z.object({
   confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-const SignUpPage = () => {
+const SignUp = () => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,26 +33,23 @@ const SignUpPage = () => {
       confirmPassword: "",
     },
   });
-  const onNext = () => router.push("/auth/signup");
-  const onBack = () => router.push("/");
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (values.password !== values.confirmPassword) {
         form.setError("confirmPassword", {
-          type: "manual",
           message: "Passwords do not match",
         });
         return;
       }
-      const userData = {
-        email: values.email,
-        password: values.password,
-        role: "USER",
-      };
 
       const response = await axios.post(
         "https://food-delivery-back-end-0cz4.onrender.com/auth/sign-up",
-        userData
+        {
+          email: values.email,
+          password: values.password,
+          role: "USER",
+        }
       );
 
       if (response) {
@@ -65,16 +62,17 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6 w-full max-w-md">
       <Link href="/">
-        <Button variant="outline" onClick={onBack} size="icon">
+        <Button variant="outline" size="icon">
           <ChevronLeft />
         </Button>
       </Link>
-      <h3 className="font-semibold text-[24px]">Create your account</h3>
+      <h3 className="text-2xl font-semibold">Create your account</h3>
       <p className="text-[#71717A]">Sign up to explore your favorite dishes.</p>
+
       <Form {...form}>
-        <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="email"
@@ -92,7 +90,6 @@ const SignUpPage = () => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="password"
@@ -106,7 +103,6 @@ const SignUpPage = () => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="confirmPassword"
@@ -124,19 +120,20 @@ const SignUpPage = () => {
               </FormItem>
             )}
           />
-          <Button onClick={onNext} type="submit">
+          <Button type="submit" className="w-full">
             Let&#39;s Go
           </Button>
         </form>
       </Form>
-      <div className="flex gap-2">
+
+      <div className="flex gap-2 justify-center">
         <p className="text-[#71717A]">Already have an account?</p>
         <Link href="/auth/login">
-          <p className="text-[#2563EB]">Log in</p>
+          <p className="text-[#2563EB] hover:underline">Log in</p>
         </Link>
       </div>
     </div>
   );
 };
 
-export default SignUpPage;
+export default SignUp;
