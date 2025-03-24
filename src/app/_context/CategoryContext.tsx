@@ -18,7 +18,7 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get<{ categories: FoodCategory[] }>(
-        "https://food-delivery-back-end-0cz4.onrender.com/food-category"
+        "https://food-delivery-back-end-r6wt.onrender.com/food-category"
       );
       setCategories(response.data.categories);
     } catch (error) {

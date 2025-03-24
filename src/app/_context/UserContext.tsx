@@ -34,7 +34,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   const fetchUserData = async (userId: string) => {
     try {
       const response = await axios.get(
-        `https://food-delivery-back-end-0cz4.onrender.com/user/${userId}`
+        `https://food-delivery-back-end-r6wt.onrender.com/user/${userId}`
       );
       setUser(response.data.user);
     } catch (error) {
@@ -48,7 +48,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       await axios.patch(
-        `https://food-delivery-back-end-0cz4.onrender.com/user/${userId}`,
+        `https://food-delivery-back-end-r6wt.onrender.com/user/${userId}`,
         { address }
       );
       setUser((prev) => (prev ? { ...prev, address } : null));

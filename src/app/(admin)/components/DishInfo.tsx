@@ -138,7 +138,7 @@ const DishInfo = ({
         image: imageUrl,
       };
       await axios.patch(
-        `https://food-delivery-back-end-0cz4.onrender.com/food/${food._id}`,
+        `https://food-delivery-back-end-r6wt.onrender.com/food/${food._id}`,
         dishData
       );
       form.reset();
@@ -152,7 +152,7 @@ const DishInfo = ({
   const handleDeleteFood = async () => {
     try {
       await axios.delete(
-        `https://food-delivery-back-end-0cz4.onrender.com/food/${food._id}`
+        `https://food-delivery-back-end-r6wt.onrender.com/food/${food._id}`
       );
       setOpen(false);
       fetchData();

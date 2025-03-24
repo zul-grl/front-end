@@ -16,7 +16,7 @@ const FoodProvider = ({ children }: { children: ReactNode }) => {
   const fetchFoodData = async () => {
     try {
       const response = await axios.get<{ allFood: FoodItem[] }>(
-        "https://food-delivery-back-end-0cz4.onrender.com/food"
+        "https://food-delivery-back-end-r6wt.onrender.com/food"
       );
       setFoods(response.data.allFood);
     } catch (error) {

@@ -71,10 +71,7 @@ export function OrderSheet() {
         })),
       };
 
-      const response = await axios.post(
-        "https://food-delivery-back-end-0cz4.onrender.com/food-order",
-        orderData
-      );
+      const response = await axios.post("/food-order", orderData);
       if (response.status === 201) {
         setIsAlertDialogOpen(true);
         clearCart();

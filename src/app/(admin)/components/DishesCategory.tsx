@@ -79,12 +79,12 @@ const DishesCategory = ({
 
       if (dialogState.type === "add") {
         await axios.post<{ category: FoodCategory }>(
-          "https://food-delivery-back-end-0cz4.onrender.com/food-category",
+          "https://food-delivery-back-end-r6wt.onrender.com/food-category",
           { categoryName: data.categoryName }
         );
       } else if (dialogState.type === "edit" && dialogState.categoryId) {
         await axios.patch<{ category: FoodCategory }>(
-          `https://food-delivery-back-end-0cz4.onrender.com/food-category/${dialogState.categoryId}`,
+          `https://food-delivery-back-end-r6wt.onrender.com/food-category/${dialogState.categoryId}`,
           { categoryName: data.categoryName }
         );
       }
@@ -100,7 +100,7 @@ const DishesCategory = ({
       if (!dialogState.categoryId) return;
 
       await axios.delete(
-        `https://food-delivery-back-end-0cz4.onrender.com/food-category/${dialogState.categoryId}`
+        `https://food-delivery-back-end-r6wt.onrender.com/food-category/${dialogState.categoryId}`
       );
 
       await fetchCategories();

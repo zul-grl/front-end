@@ -35,7 +35,7 @@ const ResetPassword = () => {
   const handleSubmit = async (values: z.infer<typeof resetSchema>) => {
     try {
       const response = await axios.post(
-        "https://food-delivery-back-end-0cz4.onrender.com/auth/reset-password-request",
+        "https://food-delivery-back-end-r6wt.onrender.com/auth/reset-password-request",
         { email: values.email }
       );
       if (response) {

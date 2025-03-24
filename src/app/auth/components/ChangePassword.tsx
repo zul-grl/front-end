@@ -47,7 +47,7 @@ const ChangePassword = () => {
       }
 
       const response = await axios.post(
-        "https://food-delivery-back-end-0cz4.onrender.com/auth/reset-password",
+        "https://food-delivery-back-end-r6wt.onrender.com/auth/reset-password",
         {
           password: values.newPassword,
           token: token,

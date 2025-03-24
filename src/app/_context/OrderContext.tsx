@@ -39,7 +39,7 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://food-delivery-back-end-0cz4.onrender.com/food-order/${currentUserId}`
+        `https://food-delivery-back-end-r6wt.onrender.com/food-order/${currentUserId}`
       );
       setOrders(response.data.orders);
     } catch (error) {
@@ -53,7 +53,7 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "https://food-delivery-back-end-0cz4.onrender.com/food-order"
+        "https://food-delivery-back-end-r6wt.onrender.com/food-order"
       );
       setAllOrders(response.data.orders);
     } catch (error) {
@@ -69,7 +69,7 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
   ) => {
     try {
       await axios.patch(
-        `https://food-delivery-back-end-0cz4.onrender.com/food-order/${foodOrderId}`,
+        `https://food-delivery-back-end-r6wt.onrender.com/food-order/${foodOrderId}`,
         {
           status: newStatus,
         }

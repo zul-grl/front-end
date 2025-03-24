@@ -44,7 +44,7 @@ const SignUp = () => {
       }
 
       const response = await axios.post(
-        "https://food-delivery-back-end-0cz4.onrender.com/auth/sign-up",
+        "https://food-delivery-back-end-r6wt.onrender.com/auth/sign-up",
         {
           email: values.email,
           password: values.password,

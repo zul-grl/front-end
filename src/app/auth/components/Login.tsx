@@ -36,7 +36,7 @@ const Login = () => {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post(
-        "https://food-delivery-back-end-0cz4.onrender.com/auth/sign-in",
+        "https://food-delivery-back-end-r6wt.onrender.com/auth/sign-in",
         values
       );
       if (response) {
