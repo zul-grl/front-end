@@ -7,8 +7,9 @@ import {
   useState,
 } from "react";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
 import { UserType } from "../_util/type";
+
 type UserContextType = {
   user: UserType | null;
   setUser: (user: UserType | null) => void;
@@ -23,13 +24,19 @@ export const useUser = () => useContext(UserContext);
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
+  const router = useRouter();
   const isAdmin = user?.role === "ADMIN";
+
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {
-      fetchUserData(userId);
+      fetchUserData(userId).catch(() => {
+        router.push("/auth/login");
+      });
+    } else {
+      router.push("/auth/login");
     }
-  }, []);
+  }, [router]);
 
   const fetchUserData = async (userId: string) => {
     try {
@@ -39,12 +46,16 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
       setUser(response.data.user);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      throw error;
     }
   };
 
   const updateAddress = async (address: string) => {
     const userId = localStorage.getItem("userId");
-    if (!userId) return;
+    if (!userId) {
+      router.push("/auth/login");
+      return;
+    }
 
     try {
       await axios.patch(
